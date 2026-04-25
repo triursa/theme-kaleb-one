@@ -1,0 +1,15 @@
+{
+  "name": "theme-kaleb-one",
+  "version": "0.1.0",
+  "description": "Shared Material Design 3 theme package for kaleb.one ecosystem",
+  "scripts": {
+    "build": "node scripts/build-tokens.js",
+    "dev": "python3 -m http.server 8080 -d showcase",
+    "build:site": "node scripts/build-tokens.js && echo 'Showcase built — open showcase/index.html'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:triursa/theme-kaleb-one.git"
+  },
+  "license": "MIT"
+}

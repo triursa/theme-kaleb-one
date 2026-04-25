@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="obsidian">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>theme-kaleb-one — M3 Design System Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme-all.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .palette-btn .palette-swatch-obsidian { background: #1A1F26; border: 1px solid #424A53; }
+    .palette-btn .palette-swatch-midnight-ocean { background: #0D1B2A; border: 1px solid #2A4264; }
+    .palette-btn .palette-swatch-volcanic { background: #1C1A16; border: 1px solid #5F5C57; }
+    .palette-btn .palette-swatch-frost { background: #F0F0F8; border: 1px solid #C6C6D0; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV RAIL -->
+  <nav class="nav-rail">
+    <a href="#colors" class="nav-rail-item nav-rail-item--active">
+      <div class="nav-rail-icon">🎨</div>
+      <span>Colors</span>
+    </a>
+    <a href="#typography" class="nav-rail-item">
+      <div class="nav-rail-icon">✏️</div>
+      <span>Type</span>
+    </a>
+    <a href="#elevation" class="nav-rail-item">
+      <div class="nav-rail-icon">📐</div>
+      <span>Elevate</span>
+    </a>
+    <a href="#buttons" class="nav-rail-item">
+      <div class="nav-rail-icon">🔘</div>
+      <span>Buttons</span>
+    </a>
+    <a href="#cards" class="nav-rail-item">
+      <div class="nav-rail-icon">🃏</div>
+      <span>Cards</span>
+    </a>
+    <a href="#inputs" class="nav-rail-item">
+      <div class="nav-rail-icon">📝</div>
+      <span>Inputs</span>
+    </a>
+    <a href="#chips" class="nav-rail-item">
+      <div class="nav-rail-icon">🏷️</div>
+      <span>Chips</span>
+    </a>
+    <a href="#snackbar" class="nav-rail-item">
+      <div class="nav-rail-icon">💬</div>
+      <span>Snackbar</span>
+    </a>
+    <a href="#lists" class="nav-rail-item">
+      <div class="nav-rail-icon">📋</div>
+      <span>Lists</span>
+    </a>
+    <a href="#motion" class="nav-rail-item">
+      <div class="nav-rail-icon">⏱️</div>
+      <span>Motion</span>
+    </a>
+  </nav>
+
+  <!-- APP BAR -->
+  <header class="app-bar">
+    <h1>kaleb.one / M3 Theme</h1>
+    <div class="palette-switcher">
+      <button class="palette-btn palette-btn--active" data-palette="obsidian" onclick="setPalette('obsidian')">
+        <span class="palette-swatch palette-swatch-obsidian"></span> Obsidian
+      </button>
+      <button class="palette-btn" data-palette="midnight-ocean" onclick="setPalette('midnight-ocean')">
+        <span class="palette-swatch palette-swatch-midnight-ocean"></span> Midnight Ocean
+      </button>
+      <button class="palette-btn" data-palette="volcanic" onclick="setPalette('volcanic')">
+        <span class="palette-swatch palette-swatch-volcanic"></span> Volcanic
+      </button>
+      <button class="palette-btn" data-palette="frost" onclick="setPalette('frost')">
+        <span class="palette-swatch palette-swatch-frost"></span> Frost
+      </button>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <!-- PALETTE INFO -->
+    <section class="section" id="palette-info">
+      <div style="background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-medium); padding: var(--md-sys-spacing-4); margin-bottom: var(--md-sys-spacing-4);">
+        <div style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: var(--md-sys-typescale-title-medium-weight);">Active Palette: <span id="active-palette-name">Obsidian</span></div>
+        <div style="font-size: var(--md-sys-typescale-body-small-size);" id="active-palette-desc">Dark slate, electric accent — sharp, modern, minimal</div>
+      </div>
+    </section>
+
+    <!-- COLORS -->
+    <section class="section" id="colors">
+      <h2 class="section-title">Color System</h2>
+      
+      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-3);">Core Colors</h3>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-primary)"></div><div class="swatch-label"><span class="swatch-name">Primary</span><span id="val-primary"></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-primary)"></div><div class="swatch-label"><span class="swatch-name">On Primary</span><span id="val-on-primary"></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-primary-container)"></div><div class="swatch-label"><span class="swatch-name">Primary Container</span><span id="val-primary-container"></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-primary-container)"></div><div class="swatch-label"><span class="swatch-name">On Prim. Container</span><span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-secondary)"></div><div class="swatch-label"><span class="swatch-name">Secondary</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-secondary)"></div><div class="swatch-label"><span class="swatch-name">On Secondary</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-secondary-container)"></div><div class="swatch-label"><span class="swatch-name">Secondary Container</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-secondary-container)"></div><div class="swatch-label"><span class="swatch-name">On Sec. Container</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-tertiary)"></div><div class="swatch-label"><span class="swatch-name">Tertiary</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-tertiary)"></div><div class="swatch-label"><span class="swatch-name">On Tertiary</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-tertiary-container)"></div><div class="swatch-label"><span class="swatch-name">Tertiary Container</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-tertiary-container)"></div><div class="swatch-label"><span class="swatch-name">On Ter. Container</span><span></span></div></div>
+      </div>
+
+      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Error</h3>
+      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));">
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-error)"></div><div class="swatch-label"><span class="swatch-name">Error</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-error)"></div><div class="swatch-label"><span class="swatch-name">On Error</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-error-container)"></div><div class="swatch-label"><span class="swatch-name">Error Container</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-error-container)"></div><div class="swatch-label"><span class="swatch-name">On Error Container</span><span></span></div></div>
+      </div>
+
+      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Surface & Background</h3>
+      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));">
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface)"></div><div class="swatch-label"><span class="swatch-name">Surface</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-surface)"></div><div class="swatch-label"><span class="swatch-name">On Surface</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-variant)"></div><div class="swatch-label"><span class="swatch-name">Surface Variant</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-surface-variant)"></div><div class="swatch-label"><span class="swatch-name">On Surface Variant</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-lowest)"></div><div class="swatch-label"><span class="swatch-name">Container Lowest</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-low)"></div><div class="swatch-label"><span class="swatch-name">Container Low</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container)"></div><div class="swatch-label"><span class="swatch-name">Container</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-high)"></div><div class="swatch-label"><span class="swatch-name">Container High</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-highest)"></div><div class="swatch-label"><span class="swatch-name">Container Highest</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-outline)"></div><div class="swatch-label"><span class="swatch-name">Outline</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-outline-variant)"></div><div class="swatch-label"><span class="swatch-name">Outline Variant</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-surface)"></div><div class="swatch-label"><span class="swatch-name">Inverse Surface</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-on-surface)"></div><div class="swatch-label"><span class="swatch-name">Inverse On Surface</span><span></span></div></div>
+        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-primary)"></div><div class="swatch-label"><span class="swatch-name">Inverse Primary</span><span></span></div></div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- TYPOGRAPHY -->
+    <section class="section" id="typography">
+      <h2 class="section-title">Typography Scale</h2>
+      <div class="type-showcase">
+        <div><span class="type-label">Display Large</span><div style="font-size: var(--md-sys-typescale-display-large-size); font-weight: var(--md-sys-typescale-display-large-weight); letter-spacing: var(--md-sys-typescale-display-large-tracking); line-height: var(--md-sys-typescale-display-large-line-height);">The quick brown fox</div></div>
+        <div><span class="type-label">Display Medium</span><div style="font-size: var(--md-sys-typescale-display-medium-size); font-weight: var(--md-sys-typescale-display-medium-weight); letter-spacing: var(--md-sys-typescale-display-medium-tracking); line-height: var(--md-sys-typescale-display-medium-line-height);">The quick brown fox</div></div>
+        <div><span class="type-label">Display Small</span><div style="font-size: var(--md-sys-typescale-display-small-size); font-weight: var(--md-sys-typescale-display-small-weight); letter-spacing: var(--md-sys-typescale-display-small-tracking); line-height: var(--md-sys-typescale-display-small-line-height);">The quick brown fox</div></div>
+        <div><span class="type-label">Headline Large</span><div style="font-size: var(--md-sys-typescale-headline-large-size); font-weight: var(--md-sys-typescale-headline-large-weight); letter-spacing: var(--md-sys-typescale-headline-large-tracking); line-height: var(--md-sys-typescale-headline-large-line-height);">Headline Large</div></div>
+        <div><span class="type-label">Headline Medium</span><div style="font-size: var(--md-sys-typescale-headline-medium-size); font-weight: var(--md-sys-typescale-headline-medium-weight); letter-spacing: var(--md-sys-typescale-headline-medium-tracking); line-height: var(--md-sys-typescale-headline-medium-line-height);">Headline Medium</div></div>
+        <div><span class="type-label">Headline Small</span><div style="font-size: var(--md-sys-typescale-headline-small-size); font-weight: var(--md-sys-typescale-headline-small-weight); letter-spacing: var(--md-sys-typescale-headline-small-tracking); line-height: var(--md-sys-typescale-headline-small-line-height);">Headline Small</div></div>
+        <div><span class="type-label">Title Large</span><div style="font-size: var(--md-sys-typescale-title-large-size); font-weight: var(--md-sys-typescale-title-large-weight); letter-spacing: var(--md-sys-typescale-title-large-tracking); line-height: var(--md-sys-typescale-title-large-line-height);">Title Large</div></div>
+        <div><span class="type-label">Title Medium</span><div style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: var(--md-sys-typescale-title-medium-weight); letter-spacing: var(--md-sys-typescale-title-medium-tracking); line-height: var(--md-sys-typescale-title-medium-line-height);">Title Medium</div></div>
+        <div><span class="type-label">Title Small</span><div style="font-size: var(--md-sys-typescale-title-small-size); font-weight: var(--md-sys-typescale-title-small-weight); letter-spacing: var(--md-sys-typescale-title-small-tracking); line-height: var(--md-sys-typescale-title-small-line-height);">Title Small</div></div>
+        <div><span class="type-label">Body Large</span><div style="font-size: var(--md-sys-typescale-body-large-size); font-weight: var(--md-sys-typescale-body-large-weight); letter-spacing: var(--md-sys-typescale-body-large-tracking); line-height: var(--md-sys-typescale-body-large-line-height);">Body large text — the primary typeface for reading.</div></div>
+        <div><span class="type-label">Body Medium</span><div style="font-size: var(--md-sys-typescale-body-medium-size); font-weight: var(--md-sys-typescale-body-medium-weight); letter-spacing: var(--md-sys-typescale-body-medium-tracking); line-height: var(--md-sys-typescale-body-medium-line-height);">Body medium text — used for most content.</div></div>
+        <div><span class="type-label">Body Small</span><div style="font-size: var(--md-sys-typescale-body-small-size); font-weight: var(--md-sys-typescale-body-small-weight); letter-spacing: var(--md-sys-typescale-body-small-tracking); line-height: var(--md-sys-typescale-body-small-line-height);">Body small text — secondary information.</div></div>
+        <div><span class="type-label">Label Large</span><div style="font-size: var(--md-sys-typescale-label-large-size); font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: var(--md-sys-typescale-label-large-tracking); line-height: var(--md-sys-typescale-label-large-line-height);">LABEL LARGE</div></div>
+        <div><span class="type-label">Label Medium</span><div style="font-size: var(--md-sys-typescale-label-medium-size); font-weight: var(--md-sys-typescale-label-medium-weight); letter-spacing: var(--md-sys-typescale-label-medium-tracking); line-height: var(--md-sys-typescale-label-medium-line-height);">LABEL MEDIUM</div></div>
+        <div><span class="type-label">Label Small</span><div style="font-size: var(--md-sys-typescale-label-small-size); font-weight: var(--md-sys-typescale-label-small-weight); letter-spacing: var(--md-sys-typescale-label-small-tracking); line-height: var(--md-sys-typescale-label-small-line-height);">LABEL SMALL</div></div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- ELEVATION -->
+    <section class="section" id="elevation">
+      <h2 class="section-title">Elevation</h2>
+      <div class="component-grid">
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-0);"><div class="md-card-title">Level 0</div><div class="md-card-body">No elevation — flat surface</div></div>
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-1);"><div class="md-card-title">Level 1</div><div class="md-card-body">Subtle lift — cards resting on surface</div></div>
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-2);"><div class="md-card-title">Level 2</div><div class="md-card-body">Medium lift — lifted cards, FAB at rest</div></div>
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-3);"><div class="md-card-title">Level 3</div><div class="md-card-body">High lift — dialogs, menus, FAB active</div></div>
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-4);"><div class="md-card-title">Level 4</div><div class="md-card-body">Search bar, snackbar</div></div>
+        <div class="md-card" style="box-shadow: var(--md-sys-elevation-5);"><div class="md-card-title">Level 5</div><div class="md-card-body">Modal — max elevation for overlays</div></div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- BUTTONS -->
+    <section class="section" id="buttons">
+      <h2 class="section-title">Buttons</h2>
+      
+      <div style="margin-bottom: var(--md-sys-spacing-4);">
+        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Filled</div>
+        <div class="button-row">
+          <button class="md-button md-button--filled">Primary Action</button>
+          <button class="md-button md-button--filled-secondary">Secondary</button>
+          <button class="md-button md-button--filled-tertiary">Tertiary</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: var(--md-sys-spacing-4);">
+        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Outlined & Tonal</div>
+        <div class="button-row">
+          <button class="md-button md-button--outlined">Outlined</button>
+          <button class="md-button md-button--tonal">Tonal</button>
+          <button class="md-button md-button--text">Text Button</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: var(--md-sys-spacing-4);">
+        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Icon & FAB</div>
+        <div class="button-row">
+          <button class="md-button md-button--icon" title="Search">🔍</button>
+          <button class="md-button md-button--icon" title="Settings">⚙️</button>
+          <button class="md-button md-button--icon" title="More">⋯</button>
+          <button class="md-button md-button--fab" title="Add">＋</button>
+        </div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- CARDS -->
+    <section class="section" id="cards">
+      <h2 class="section-title">Cards</h2>
+      <div class="component-grid">
+        <div class="md-card md-card--elevated">
+          <div class="md-card-title">Elevated Card</div>
+          <div class="md-card-subtitle">Default elevation style</div>
+          <div class="md-card-body">Elevated cards stand slightly above the surface with a shadow, providing visual hierarchy.</div>
+        </div>
+        <div class="md-card md-card--filled">
+          <div class="md-card-title">Filled Card</div>
+          <div class="md-card-subtitle">Surface container highest</div>
+          <div class="md-card-body">Filled cards use the highest container color, creating strong contrast with the background.</div>
+        </div>
+        <div class="md-card md-card--outlined">
+          <div class="md-card-title">Outlined Card</div>
+          <div class="md-card-subtitle">Bordered, no shadow</div>
+          <div class="md-card-body">Outlined cards use a border for definition — no shadow, flat on the surface.</div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- INPUTS -->
+    <section class="section" id="inputs">
+      <h2 class="section-title">Text Fields</h2>
+      <div style="max-width: 480px;">
+        <div class="md-textfield">
+          <input type="text" id="name" placeholder=" ">
+          <label for="name">Name</label>
+        </div>
+        <div class="md-textfield">
+          <input type="email" id="email" placeholder=" ">
+          <label for="email">Email</label>
+        </div>
+        <div class="md-textfield">
+          <input type="text" id="search" placeholder=" ">
+          <label for="search">Search</label>
+        </div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- CHIPS -->
+    <section class="section" id="chips">
+      <h2 class="section-title">Chips</h2>
+      <div class="button-row" style="gap: var(--md-sys-spacing-2);">
+        <span class="md-chip md-chip--assist">Assist</span>
+        <span class="md-chip md-chip--filter">Filter</span>
+        <span class="md-chip md-chip--suggestion">Suggestion</span>
+        <span class="md-chip md-chip--assist">🎨 Design</span>
+        <span class="md-chip md-chip--filter">✓ Active</span>
+        <span class="md-chip md-chip--suggestion">kaleb.one</span>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- SNACKBAR -->
+    <section class="section" id="snackbar">
+      <h2 class="section-title">Snackbar & Dialog</h2>
+      <div style="display: flex; flex-direction: column; gap: var(--md-sys-spacing-4); max-width: 560px;">
+        <div class="md-snackbar">
+          Item archived
+          <button class="md-button md-button--text">Undo</button>
+        </div>
+
+        <div class="md-dialog" style="position: relative; max-width: 100%;">
+          <div class="md-dialog-title">Delete project?</div>
+          <div class="md-dialog-body">This will permanently remove the project and all associated data. This action cannot be undone.</div>
+          <div class="md-dialog-actions">
+            <button class="md-button md-button--text">Cancel</button>
+            <button class="md-button md-button--filled" style="background-color: var(--md-sys-color-error);">Delete</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- LISTS -->
+    <section class="section" id="lists">
+      <h2 class="section-title">Lists</h2>
+      <div class="md-list" style="max-width: 480px;">
+        <div class="md-list-item">
+          <div class="md-list-item-icon">📥</div>
+          <div class="md-list-item-text">
+            <div class="md-list-item-headline">Inbox</div>
+            <div class="md-list-item-supporting">12 new messages</div>
+          </div>
+        </div>
+        <div class="md-list-item">
+          <div class="md-list-item-icon">📅</div>
+          <div class="md-list-item-text">
+            <div class="md-list-item-headline">Calendar</div>
+            <div class="md-list-item-supporting">3 events today</div>
+          </div>
+        </div>
+        <div class="md-list-item">
+          <div class="md-list-item-icon">📊</div>
+          <div class="md-list-item-text">
+            <div class="md-list-item-headline">Analytics</div>
+            <div class="md-list-item-supporting">Last updated 2h ago</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Progress</h3>
+      <div style="max-width: 480px;">
+        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 75%;"></div></div>
+        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 45%;"></div></div>
+        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 15%; background-color: var(--md-sys-color-error);"></div></div>
+      </div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- MOTION -->
+    <section class="section" id="motion">
+      <h2 class="section-title">Motion & Shape</h2>
+      <div class="component-grid">
+        <div class="md-card md-card--outlined">
+          <div class="md-card-title">Corner Radii</div>
+          <div style="display: grid; gap: var(--md-sys-spacing-2); margin-top: var(--md-sys-spacing-2);">
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: var(--md-sys-shape-corner-none); text-align: center;">None (0px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-extra-small); text-align: center;">XS (4px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); border-radius: var(--md-sys-shape-corner-small); text-align: center;">Small (8px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: var(--md-sys-shape-corner-medium); text-align: center;">Medium (12px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-large); text-align: center;">Large (16px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); border-radius: var(--md-sys-shape-corner-extra-large); text-align: center;">XL (28px)</div>
+            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); border-radius: var(--md-sys-shape-corner-full); text-align: center;">Full (pill)</div>
+          </div>
+        </div>
+        <div class="md-card md-card--outlined">
+          <div class="md-card-title">Spacing Scale</div>
+          <div style="display: grid; gap: var(--md-sys-spacing-1); margin-top: var(--md-sys-spacing-2);">
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-1); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">4px — xs</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-2); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">8px — sm</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-3); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">12px — md</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-4); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">16px — base</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-6); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">24px — lg</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-8); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">32px — xl</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
+              <div style="width: var(--md-sys-spacing-12); height: 16px; background-color: var(--md-sys-color-primary);"></div>
+              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">48px — 2xl</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section style="margin-top: var(--md-sys-spacing-8); padding: var(--md-sys-spacing-6) 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
+      <p style="font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant); text-align: center;">
+        theme-kaleb-one · Material Design 3 · kaleb.one ecosystem<br>
+        Palettes: <span id="footer-palettes">Obsidian · Midnight Ocean · Volcanic · Frost</span>
+      </p>
+    </section>
+
+  </main>
+
+  <script>
+    const palettes = {
+      'obsidian': { name: 'Obsidian', desc: 'Dark slate, electric accent — sharp, modern, minimal' },
+      'midnight-ocean': { name: 'Midnight Ocean', desc: 'Deep navy, teal accent — calm authority' },
+      'volcanic': { name: 'Volcanic', desc: 'Dark warm gray, amber/orange accent — warm, grounded' },
+      'frost': { name: 'Frost', desc: 'Light theme — cool gray, blue accent — clean, professional' }
+    };
+
+    function setPalette(name) {
+      document.documentElement.setAttribute('data-theme', name);
+      
+      // Update active button
+      document.querySelectorAll('.palette-btn').forEach(btn => {
+        btn.classList.toggle('palette-btn--active', btn.dataset.palette === name);
+      });
+      
+      // Update info
+      const info = palettes[name];
+      document.getElementById('active-palette-name').textContent = info.name;
+      document.getElementById('active-palette-desc').textContent = info.desc;
+      
+      // Update nav rail active state
+      document.querySelectorAll('.nav-rail-item').forEach(item => {
+        item.classList.remove('nav-rail-item--active');
+      });
+    }
+
+    // Nav rail active state
+    document.querySelectorAll('.nav-rail-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.nav-rail-item').forEach(i => i.classList.remove('nav-rail-item--active'));
+        this.classList.add('nav-rail-item--active');
+      });
+    });
+  </script>
+
+</body>
+</html>
