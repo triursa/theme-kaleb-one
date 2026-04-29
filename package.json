@@ -1,7 +1,7 @@
 {
-  "name": "@kaleb-one/theme",
+  "name": "@kaleb.one/theme",
   "version": "0.1.0",
-  "description": "Shared Material Design 3 theme package for the kaleb.one ecosystem — Obsidian, Midnight Ocean, Volcanic, and Frost palettes",
+  "description": "Shared Material Design 3 theme package for the kaleb.one ecosystem \u2014 Obsidian, Midnight Ocean, Volcanic, and Frost palettes",
   "keywords": [
     "material-design-3",
     "m3",
@@ -38,7 +38,7 @@
   "scripts": {
     "build": "node scripts/build-tokens.js",
     "dev": "python3 -m http.server 8080 -d showcase",
-    "build:site": "node scripts/build-tokens.js && echo 'Showcase built — open showcase/index.html'",
+    "build:site": "node scripts/build-tokens.js && echo 'Showcase built \u2014 open showcase/index.html'",
     "prepublishOnly": "node scripts/build-tokens.js"
   },
   "peerDependencies": {
