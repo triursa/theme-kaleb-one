@@ -29,7 +29,9 @@
       padding: var(--md-sys-spacing-3) 0; gap: var(--md-sys-spacing-1);
       z-index: 100; border-right: 1px solid var(--md-sys-color-outline-variant);
       overflow-y: auto;
+      scrollbar-width: none;
     }
+    .nav-rail::-webkit-scrollbar { display: none; }
     .nav-rail-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: var(--md-sys-spacing-2) var(--md-sys-spacing-1);
@@ -48,11 +50,12 @@
 
     /* === APP BAR === */
     .app-bar {
-      position: fixed; top: 0; left: 80px; right: 0; height: 64px;
+      position: fixed; top: 0; left: 0; right: 0; height: 64px;
       background-color: var(--md-sys-color-surface);
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--md-sys-spacing-6);
+      padding: 0 var(--md-sys-spacing-6) 0 var(--md-sys-spacing-6);
+      padding-left: 80px;
       z-index: 99;
     }
     .app-bar h1 {
