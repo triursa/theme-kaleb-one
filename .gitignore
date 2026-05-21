@@ -2,3 +2,4 @@ node_modules/
 deploy/
 .wrangler/
 showcase/.wrangler/
+.docker/

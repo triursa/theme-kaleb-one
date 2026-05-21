@@ -10,10 +10,292 @@
   <link rel="stylesheet" href="css/theme-all.css">
   <link rel="stylesheet" href="css/components.css">
   <style>
-    .palette-btn .palette-swatch-obsidian { background: #1A1F26; border: 1px solid #424A53; }
-    .palette-btn .palette-swatch-midnight-ocean { background: #0D1B2A; border: 1px solid #2A4264; }
-    .palette-btn .palette-swatch-volcanic { background: #1C1A16; border: 1px solid #5F5C57; }
-    .palette-btn .palette-swatch-frost { background: #F0F0F8; border: 1px solid #C6C6D0; }
+    /* === LAYOUT === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--md-sys-font-family-body);
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      font-size: var(--md-sys-typescale-body-medium-size);
+      line-height: var(--md-sys-typescale-body-medium-line-height);
+      min-height: 100vh;
+    }
+
+    /* === NAV RAIL === */
+    .nav-rail {
+      position: fixed; top: 0; left: 0; width: 80px; height: 100vh;
+      background-color: var(--md-sys-color-surface-container);
+      display: flex; flex-direction: column; align-items: center;
+      padding: var(--md-sys-spacing-3) 0; gap: var(--md-sys-spacing-1);
+      z-index: 100; border-right: 1px solid var(--md-sys-color-outline-variant);
+      overflow-y: auto;
+    }
+    .nav-rail-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: var(--md-sys-spacing-2) var(--md-sys-spacing-1);
+      border-radius: var(--md-sys-shape-corner-full);
+      color: var(--md-sys-color-on-surface-variant);
+      text-decoration: none; cursor: pointer;
+      transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+      width: 64px; font-size: var(--md-sys-typescale-label-small-size);
+    }
+    .nav-rail-item:hover { background-color: var(--md-sys-color-surface-container-high); }
+    .nav-rail-item--active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+    }
+    .nav-rail-icon { font-size: 20px; margin-bottom: 2px; }
+
+    /* === APP BAR === */
+    .app-bar {
+      position: fixed; top: 0; left: 80px; right: 0; height: 64px;
+      background-color: var(--md-sys-color-surface);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--md-sys-spacing-6);
+      z-index: 99;
+    }
+    .app-bar h1 {
+      font-size: var(--md-sys-typescale-title-large-size);
+      font-weight: var(--md-sys-typescale-title-large-weight);
+      color: var(--md-sys-color-on-surface);
+    }
+
+    /* === PALETTE SWITCHER === */
+    .palette-switcher { display: flex; gap: var(--md-sys-spacing-2); }
+    .palette-btn {
+      display: flex; align-items: center; gap: var(--md-sys-spacing-1);
+      padding: var(--md-sys-spacing-1) var(--md-sys-spacing-3);
+      border-radius: var(--md-sys-shape-corner-full);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: transparent; color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer; font-size: var(--md-sys-typescale-label-small-size);
+      font-family: var(--md-sys-font-family-body);
+      transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+    }
+    .palette-btn:hover { background-color: var(--md-sys-color-surface-container-high); }
+    .palette-btn--active {
+      background-color: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border-color: transparent;
+    }
+    .palette-swatch {
+      display: inline-block; width: 16px; height: 16px;
+      border-radius: var(--md-sys-shape-corner-full); flex-shrink: 0;
+    }
+    .palette-swatch-obsidian { background: #1A1F26; border: 1px solid #424A53; }
+    .palette-swatch-midnight-ocean { background: #0D1B2A; border: 1px solid #2A4264; }
+    .palette-swatch-volcanic { background: #1C1A16; border: 1px solid #5F5C57; }
+    .palette-swatch-frost { background: #F0F0F8; border: 1px solid #C6C6D0; }
+
+    /* === MAIN CONTENT === */
+    .main-content {
+      margin-left: 80px; padding: 80px var(--md-sys-spacing-6) var(--md-sys-spacing-8);
+      max-width: 1200px;
+    }
+    .section { margin-bottom: var(--md-sys-spacing-8); scroll-margin-top: 80px; }
+    .section-title {
+      font-size: var(--md-sys-typescale-headline-small-size);
+      font-weight: var(--md-sys-typescale-headline-small-weight);
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: var(--md-sys-spacing-4);
+    }
+    .section-subtitle {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: var(--md-sys-spacing-3);
+      margin-top: var(--md-sys-spacing-5);
+    }
+
+    /* === SWATCH GRID === */
+    .swatch-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: var(--md-sys-spacing-3);
+    }
+    .swatch {
+      border-radius: var(--md-sys-shape-corner-medium);
+      overflow: hidden; position: relative; cursor: pointer;
+      transition: transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+    }
+    .swatch:hover { transform: scale(1.03); }
+    .swatch-color { height: 64px; }
+    .swatch-label {
+      padding: var(--md-sys-spacing-2);
+      background-color: var(--md-sys-color-surface-container-low);
+    }
+    .swatch-name {
+      display: block; font-size: var(--md-sys-typescale-label-small-size);
+      color: var(--md-sys-color-on-surface); font-weight: 500;
+    }
+    .swatch-value {
+      display: block; font-size: 11px;
+      font-family: var(--md-sys-font-family-mono);
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer;
+    }
+    .swatch-value:hover { color: var(--md-sys-color-primary); }
+
+    /* === BUTTON ROW === */
+    .button-row { display: flex; flex-wrap: wrap; gap: var(--md-sys-spacing-3); align-items: center; }
+
+    /* === COMPONENT GRID === */
+    .component-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--md-sys-spacing-4);
+    }
+
+    /* === TYPE SHOWCASE === */
+    .type-showcase { display: flex; flex-direction: column; gap: var(--md-sys-spacing-3); }
+    .type-label {
+      font-size: var(--md-sys-typescale-label-small-size);
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: var(--md-sys-font-family-mono);
+      margin-bottom: var(--md-sys-spacing-1);
+    }
+
+    /* === TOKEN INSPECTOR PANEL === */
+    .inspector-overlay {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 360px;
+      background-color: var(--md-sys-color-surface-container);
+      border-left: 1px solid var(--md-sys-color-outline-variant);
+      z-index: 200; transform: translateX(100%);
+      transition: transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized);
+      display: flex; flex-direction: column;
+      box-shadow: var(--md-sys-elevation-4);
+    }
+    .inspector-overlay.open { transform: translateX(0); }
+    .inspector-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--md-sys-spacing-4);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .inspector-header h3 {
+      font-size: var(--md-sys-typescale-title-medium-size);
+      font-weight: var(--md-sys-typescale-title-medium-weight);
+    }
+    .inspector-body { flex: 1; overflow-y: auto; padding: var(--md-sys-spacing-4); }
+    .inspector-token-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: var(--md-sys-spacing-2) var(--md-sys-spacing-3);
+      border-radius: var(--md-sys-shape-corner-small);
+      margin-bottom: var(--md-sys-spacing-1);
+    }
+    .inspector-token-row:hover { background-color: var(--md-sys-color-surface-container-high); }
+    .inspector-token-name {
+      font-family: var(--md-sys-font-family-mono);
+      font-size: var(--md-sys-typescale-label-small-size);
+      color: var(--md-sys-color-on-surface);
+    }
+    .inspector-token-val {
+      font-family: var(--md-sys-font-family-mono);
+      font-size: var(--md-sys-typescale-label-small-size);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .inspector-color-dot {
+      display: inline-block; width: 12px; height: 12px;
+      border-radius: var(--md-sys-shape-corner-full);
+      margin-right: var(--md-sys-spacing-2);
+      vertical-align: middle;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    /* === COPY TOAST === */
+    .copy-toast {
+      position: fixed; bottom: var(--md-sys-spacing-8); left: 50%; transform: translateX(-50%) translateY(80px);
+      background-color: var(--md-sys-color-inverse-surface);
+      color: var(--md-sys-color-inverse-on-surface);
+      padding: var(--md-sys-spacing-3) var(--md-sys-spacing-5);
+      border-radius: var(--md-sys-shape-corner-medium);
+      font-size: var(--md-sys-typescale-body-medium-size);
+      z-index: 300;
+      opacity: 0; pointer-events: none;
+      transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+    }
+    .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+
+    /* === PALETTE COMPARISON === */
+    .palette-compare {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--md-sys-spacing-4);
+    }
+    .palette-compare-card {
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: var(--md-sys-spacing-4);
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    /* === CODE BLOCK === */
+    .code-block {
+      background-color: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: var(--md-sys-spacing-3);
+      font-family: var(--md-sys-font-family-mono);
+      font-size: var(--md-sys-typescale-body-small-size);
+      overflow-x: auto; position: relative;
+      color: var(--md-sys-color-on-surface);
+    }
+    .code-copy-btn {
+      position: absolute; top: var(--md-sys-spacing-2); right: var(--md-sys-spacing-2);
+      background: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      color: var(--md-sys-color-on-surface-variant);
+      border-radius: var(--md-sys-shape-corner-small);
+      padding: 2px var(--md-sys-spacing-2);
+      cursor: pointer; font-size: 11px;
+      font-family: var(--md-sys-font-family-mono);
+    }
+    .code-copy-btn:hover { background-color: var(--md-sys-color-surface-container-highest); }
+
+    /* === INSPECT MODE HIGHLIGHT === */
+    .inspect-mode *:hover {
+      outline: 2px solid var(--md-sys-color-primary) !important;
+      outline-offset: 2px;
+      cursor: crosshair !important;
+    }
+
+    /* === PALETTE GENERATOR === */
+    .palette-gen-preview {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: var(--md-sys-spacing-2); margin-top: var(--md-sys-spacing-3);
+    }
+    .palette-gen-swatch {
+      text-align: center; padding: var(--md-sys-spacing-3) var(--md-sys-spacing-2);
+      border-radius: var(--md-sys-shape-corner-medium);
+    }
+    .palette-gen-label {
+      font-size: 11px; font-family: var(--md-sys-font-family-mono);
+      margin-top: var(--md-sys-spacing-1);
+    }
+    .color-input-row { display: flex; gap: var(--md-sys-spacing-3); align-items: center; margin-bottom: var(--md-sys-spacing-3); flex-wrap: wrap; }
+
+    /* === TABS === */
+    .tab-bar { display: flex; gap: 0; margin-bottom: var(--md-sys-spacing-4); border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+    .tab-item {
+      padding: var(--md-sys-spacing-3) var(--md-sys-spacing-5);
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer; border-bottom: 2px solid transparent;
+      font-size: var(--md-sys-typescale-label-large-size);
+      font-weight: var(--md-sys-typescale-label-large-weight);
+      transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+      background: none; border-top: none; border-left: none; border-right: none;
+      font-family: var(--md-sys-font-family-body);
+    }
+    .tab-item:hover { background-color: var(--md-sys-color-surface-container-high); }
+    .tab-item--active {
+      color: var(--md-sys-color-primary);
+      border-bottom-color: var(--md-sys-color-primary);
+    }
+    .tab-panel { display: none; }
+    .tab-panel--active { display: block; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .nav-rail { display: none; }
+      .app-bar { left: 0; }
+      .main-content { margin-left: 0; padding: 80px var(--md-sys-spacing-4); }
+      .palette-switcher { flex-wrap: wrap; gap: var(--md-sys-spacing-1); }
+      .inspector-overlay { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -21,121 +303,94 @@
   <!-- NAV RAIL -->
   <nav class="nav-rail">
     <a href="#colors" class="nav-rail-item nav-rail-item--active">
-      <div class="nav-rail-icon">🎨</div>
-      <span>Colors</span>
+      <div class="nav-rail-icon">🎨</div><span>Colors</span>
     </a>
     <a href="#typography" class="nav-rail-item">
-      <div class="nav-rail-icon">✏️</div>
-      <span>Type</span>
+      <div class="nav-rail-icon">✏️</div><span>Type</span>
     </a>
     <a href="#elevation" class="nav-rail-item">
-      <div class="nav-rail-icon">📐</div>
-      <span>Elevate</span>
+      <div class="nav-rail-icon">📐</div><span>Elevate</span>
     </a>
-    <a href="#buttons" class="nav-rail-item">
-      <div class="nav-rail-icon">🔘</div>
-      <span>Buttons</span>
+    <a href="#components" class="nav-rail-item">
+      <div class="nav-rail-icon">🧩</div><span>Parts</span>
     </a>
-    <a href="#cards" class="nav-rail-item">
-      <div class="nav-rail-icon">🃏</div>
-      <span>Cards</span>
+    <a href="#compositions" class="nav-rail-item">
+      <div class="nav-rail-icon">🖼️</div><span>Layouts</span>
     </a>
-    <a href="#inputs" class="nav-rail-item">
-      <div class="nav-rail-icon">📝</div>
-      <span>Inputs</span>
+    <a href="#playground" class="nav-rail-item">
+      <div class="nav-rail-icon">🔬</div><span>Play</span>
     </a>
-    <a href="#chips" class="nav-rail-item">
-      <div class="nav-rail-icon">🏷️</div>
-      <span>Chips</span>
-    </a>
-    <a href="#snackbar" class="nav-rail-item">
-      <div class="nav-rail-icon">💬</div>
-      <span>Snackbar</span>
-    </a>
-    <a href="#lists" class="nav-rail-item">
-      <div class="nav-rail-icon">📋</div>
-      <span>Lists</span>
-    </a>
-    <a href="#motion" class="nav-rail-item">
-      <div class="nav-rail-icon">⏱️</div>
-      <span>Motion</span>
+    <a href="#export" class="nav-rail-item">
+      <div class="nav-rail-icon">📦</div><span>Export</span>
     </a>
   </nav>
 
   <!-- APP BAR -->
   <header class="app-bar">
     <h1>kaleb.one / M3 Theme</h1>
-    <div class="palette-switcher">
-      <button class="palette-btn palette-btn--active" data-palette="obsidian" onclick="setPalette('obsidian')">
-        <span class="palette-swatch palette-swatch-obsidian"></span> Obsidian
+    <div style="display:flex;align-items:center;gap:var(--md-sys-spacing-3);">
+      <button id="inspect-toggle" class="palette-btn" title="Toggle token inspector mode">
+        🔍 Inspect
       </button>
-      <button class="palette-btn" data-palette="midnight-ocean" onclick="setPalette('midnight-ocean')">
-        <span class="palette-swatch palette-swatch-midnight-ocean"></span> Midnight Ocean
-      </button>
-      <button class="palette-btn" data-palette="volcanic" onclick="setPalette('volcanic')">
-        <span class="palette-swatch palette-swatch-volcanic"></span> Volcanic
-      </button>
-      <button class="palette-btn" data-palette="frost" onclick="setPalette('frost')">
-        <span class="palette-swatch palette-swatch-frost"></span> Frost
-      </button>
+      <div class="palette-switcher">
+        <button class="palette-btn palette-btn--active" data-palette="obsidian" onclick="setPalette('obsidian')">
+          <span class="palette-swatch palette-swatch-obsidian"></span> Obsidian
+        </button>
+        <button class="palette-btn" data-palette="midnight-ocean" onclick="setPalette('midnight-ocean')">
+          <span class="palette-swatch palette-swatch-midnight-ocean"></span> Midnight Ocean
+        </button>
+        <button class="palette-btn" data-palette="volcanic" onclick="setPalette('volcanic')">
+          <span class="palette-swatch palette-swatch-volcanic"></span> Volcanic
+        </button>
+        <button class="palette-btn" data-palette="frost" onclick="setPalette('frost')">
+          <span class="palette-swatch palette-swatch-frost"></span> Frost
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="main-content">
+  <!-- TOKEN INSPECTOR PANEL -->
+  <div class="inspector-overlay" id="inspector-panel">
+    <div class="inspector-header">
+      <h3>Token Inspector</h3>
+      <button onclick="closeInspector()" style="background:none;border:none;color:var(--md-sys-color-on-surface-variant);cursor:pointer;font-size:20px;">✕</button>
+    </div>
+    <div class="inspector-body" id="inspector-body">
+      <p style="color:var(--md-sys-color-on-surface-variant);font-size:var(--md-sys-typescale-body-small-size);">
+        Click any element in inspect mode to see its tokens.
+      </p>
+    </div>
+  </div>
+
+  <!-- COPY TOAST -->
+  <div class="copy-toast" id="copy-toast">Copied to clipboard!</div>
+
+  <main class="main-content" id="main-content">
 
     <!-- PALETTE INFO -->
     <section class="section" id="palette-info">
       <div style="background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-medium); padding: var(--md-sys-spacing-4); margin-bottom: var(--md-sys-spacing-4);">
-        <div style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: var(--md-sys-typescale-title-medium-weight);">Active Palette: <span id="active-palette-name">Obsidian</span></div>
-        <div style="font-size: var(--md-sys-typescale-body-small-size);" id="active-palette-desc">Dark slate, electric accent — sharp, modern, minimal</div>
+        <div style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: var(--md-sys-typescale-title-medium-weight);">
+          Active Palette: <span id="active-palette-name">Obsidian</span>
+        </div>
+        <div style="font-size: var(--md-sys-typescale-body-small-size);" id="active-palette-desc">
+          Dark slate, electric accent — sharp, modern, minimal
+        </div>
       </div>
     </section>
 
     <!-- COLORS -->
     <section class="section" id="colors">
       <h2 class="section-title">Color System</h2>
-      
-      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin-bottom: var(--md-sys-spacing-3);">Core Colors</h3>
-      <div class="swatch-grid">
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-primary)"></div><div class="swatch-label"><span class="swatch-name">Primary</span><span id="val-primary"></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-primary)"></div><div class="swatch-label"><span class="swatch-name">On Primary</span><span id="val-on-primary"></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-primary-container)"></div><div class="swatch-label"><span class="swatch-name">Primary Container</span><span id="val-primary-container"></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-primary-container)"></div><div class="swatch-label"><span class="swatch-name">On Prim. Container</span><span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-secondary)"></div><div class="swatch-label"><span class="swatch-name">Secondary</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-secondary)"></div><div class="swatch-label"><span class="swatch-name">On Secondary</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-secondary-container)"></div><div class="swatch-label"><span class="swatch-name">Secondary Container</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-secondary-container)"></div><div class="swatch-label"><span class="swatch-name">On Sec. Container</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-tertiary)"></div><div class="swatch-label"><span class="swatch-name">Tertiary</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-tertiary)"></div><div class="swatch-label"><span class="swatch-name">On Tertiary</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-tertiary-container)"></div><div class="swatch-label"><span class="swatch-name">Tertiary Container</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-tertiary-container)"></div><div class="swatch-label"><span class="swatch-name">On Ter. Container</span><span></span></div></div>
-      </div>
 
-      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Error</h3>
-      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));">
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-error)"></div><div class="swatch-label"><span class="swatch-name">Error</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-error)"></div><div class="swatch-label"><span class="swatch-name">On Error</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-error-container)"></div><div class="swatch-label"><span class="swatch-name">Error Container</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-error-container)"></div><div class="swatch-label"><span class="swatch-name">On Error Container</span><span></span></div></div>
-      </div>
+      <h3 class="section-subtitle">Core Colors</h3>
+      <div class="swatch-grid" id="core-swatches"></div>
 
-      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Surface & Background</h3>
-      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));">
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface)"></div><div class="swatch-label"><span class="swatch-name">Surface</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-surface)"></div><div class="swatch-label"><span class="swatch-name">On Surface</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-variant)"></div><div class="swatch-label"><span class="swatch-name">Surface Variant</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-on-surface-variant)"></div><div class="swatch-label"><span class="swatch-name">On Surface Variant</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-lowest)"></div><div class="swatch-label"><span class="swatch-name">Container Lowest</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-low)"></div><div class="swatch-label"><span class="swatch-name">Container Low</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container)"></div><div class="swatch-label"><span class="swatch-name">Container</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-high)"></div><div class="swatch-label"><span class="swatch-name">Container High</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-surface-container-highest)"></div><div class="swatch-label"><span class="swatch-name">Container Highest</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-outline)"></div><div class="swatch-label"><span class="swatch-name">Outline</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-outline-variant)"></div><div class="swatch-label"><span class="swatch-name">Outline Variant</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-surface)"></div><div class="swatch-label"><span class="swatch-name">Inverse Surface</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-on-surface)"></div><div class="swatch-label"><span class="swatch-name">Inverse On Surface</span><span></span></div></div>
-        <div class="swatch"><div class="swatch-color" style="background-color: var(--md-sys-color-inverse-primary)"></div><div class="swatch-label"><span class="swatch-name">Inverse Primary</span><span></span></div></div>
-      </div>
+      <h3 class="section-subtitle">Error</h3>
+      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));" id="error-swatches"></div>
+
+      <h3 class="section-subtitle">Surface & Background</h3>
+      <div class="swatch-grid" style="grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));" id="surface-swatches"></div>
     </section>
 
     <hr class="md-divider">
@@ -143,23 +398,7 @@
     <!-- TYPOGRAPHY -->
     <section class="section" id="typography">
       <h2 class="section-title">Typography Scale</h2>
-      <div class="type-showcase">
-        <div><span class="type-label">Display Large</span><div style="font-size: var(--md-sys-typescale-display-large-size); font-weight: var(--md-sys-typescale-display-large-weight); letter-spacing: var(--md-sys-typescale-display-large-tracking); line-height: var(--md-sys-typescale-display-large-line-height);">The quick brown fox</div></div>
-        <div><span class="type-label">Display Medium</span><div style="font-size: var(--md-sys-typescale-display-medium-size); font-weight: var(--md-sys-typescale-display-medium-weight); letter-spacing: var(--md-sys-typescale-display-medium-tracking); line-height: var(--md-sys-typescale-display-medium-line-height);">The quick brown fox</div></div>
-        <div><span class="type-label">Display Small</span><div style="font-size: var(--md-sys-typescale-display-small-size); font-weight: var(--md-sys-typescale-display-small-weight); letter-spacing: var(--md-sys-typescale-display-small-tracking); line-height: var(--md-sys-typescale-display-small-line-height);">The quick brown fox</div></div>
-        <div><span class="type-label">Headline Large</span><div style="font-size: var(--md-sys-typescale-headline-large-size); font-weight: var(--md-sys-typescale-headline-large-weight); letter-spacing: var(--md-sys-typescale-headline-large-tracking); line-height: var(--md-sys-typescale-headline-large-line-height);">Headline Large</div></div>
-        <div><span class="type-label">Headline Medium</span><div style="font-size: var(--md-sys-typescale-headline-medium-size); font-weight: var(--md-sys-typescale-headline-medium-weight); letter-spacing: var(--md-sys-typescale-headline-medium-tracking); line-height: var(--md-sys-typescale-headline-medium-line-height);">Headline Medium</div></div>
-        <div><span class="type-label">Headline Small</span><div style="font-size: var(--md-sys-typescale-headline-small-size); font-weight: var(--md-sys-typescale-headline-small-weight); letter-spacing: var(--md-sys-typescale-headline-small-tracking); line-height: var(--md-sys-typescale-headline-small-line-height);">Headline Small</div></div>
-        <div><span class="type-label">Title Large</span><div style="font-size: var(--md-sys-typescale-title-large-size); font-weight: var(--md-sys-typescale-title-large-weight); letter-spacing: var(--md-sys-typescale-title-large-tracking); line-height: var(--md-sys-typescale-title-large-line-height);">Title Large</div></div>
-        <div><span class="type-label">Title Medium</span><div style="font-size: var(--md-sys-typescale-title-medium-size); font-weight: var(--md-sys-typescale-title-medium-weight); letter-spacing: var(--md-sys-typescale-title-medium-tracking); line-height: var(--md-sys-typescale-title-medium-line-height);">Title Medium</div></div>
-        <div><span class="type-label">Title Small</span><div style="font-size: var(--md-sys-typescale-title-small-size); font-weight: var(--md-sys-typescale-title-small-weight); letter-spacing: var(--md-sys-typescale-title-small-tracking); line-height: var(--md-sys-typescale-title-small-line-height);">Title Small</div></div>
-        <div><span class="type-label">Body Large</span><div style="font-size: var(--md-sys-typescale-body-large-size); font-weight: var(--md-sys-typescale-body-large-weight); letter-spacing: var(--md-sys-typescale-body-large-tracking); line-height: var(--md-sys-typescale-body-large-line-height);">Body large text — the primary typeface for reading.</div></div>
-        <div><span class="type-label">Body Medium</span><div style="font-size: var(--md-sys-typescale-body-medium-size); font-weight: var(--md-sys-typescale-body-medium-weight); letter-spacing: var(--md-sys-typescale-body-medium-tracking); line-height: var(--md-sys-typescale-body-medium-line-height);">Body medium text — used for most content.</div></div>
-        <div><span class="type-label">Body Small</span><div style="font-size: var(--md-sys-typescale-body-small-size); font-weight: var(--md-sys-typescale-body-small-weight); letter-spacing: var(--md-sys-typescale-body-small-tracking); line-height: var(--md-sys-typescale-body-small-line-height);">Body small text — secondary information.</div></div>
-        <div><span class="type-label">Label Large</span><div style="font-size: var(--md-sys-typescale-label-large-size); font-weight: var(--md-sys-typescale-label-large-weight); letter-spacing: var(--md-sys-typescale-label-large-tracking); line-height: var(--md-sys-typescale-label-large-line-height);">LABEL LARGE</div></div>
-        <div><span class="type-label">Label Medium</span><div style="font-size: var(--md-sys-typescale-label-medium-size); font-weight: var(--md-sys-typescale-label-medium-weight); letter-spacing: var(--md-sys-typescale-label-medium-tracking); line-height: var(--md-sys-typescale-label-medium-line-height);">LABEL MEDIUM</div></div>
-        <div><span class="type-label">Label Small</span><div style="font-size: var(--md-sys-typescale-label-small-size); font-weight: var(--md-sys-typescale-label-small-weight); letter-spacing: var(--md-sys-typescale-label-small-tracking); line-height: var(--md-sys-typescale-label-small-line-height);">LABEL SMALL</div></div>
-      </div>
+      <div class="type-showcase" id="type-showcase"></div>
     </section>
 
     <hr class="md-divider">
@@ -167,128 +406,103 @@
     <!-- ELEVATION -->
     <section class="section" id="elevation">
       <h2 class="section-title">Elevation</h2>
-      <div class="component-grid">
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-0);"><div class="md-card-title">Level 0</div><div class="md-card-body">No elevation — flat surface</div></div>
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-1);"><div class="md-card-title">Level 1</div><div class="md-card-body">Subtle lift — cards resting on surface</div></div>
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-2);"><div class="md-card-title">Level 2</div><div class="md-card-body">Medium lift — lifted cards, FAB at rest</div></div>
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-3);"><div class="md-card-title">Level 3</div><div class="md-card-body">High lift — dialogs, menus, FAB active</div></div>
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-4);"><div class="md-card-title">Level 4</div><div class="md-card-body">Search bar, snackbar</div></div>
-        <div class="md-card" style="box-shadow: var(--md-sys-elevation-5);"><div class="md-card-title">Level 5</div><div class="md-card-body">Modal — max elevation for overlays</div></div>
-      </div>
+      <div class="component-grid" id="elevation-grid"></div>
     </section>
 
     <hr class="md-divider">
 
-    <!-- BUTTONS -->
-    <section class="section" id="buttons">
-      <h2 class="section-title">Buttons</h2>
-      
-      <div style="margin-bottom: var(--md-sys-spacing-4);">
-        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Filled</div>
-        <div class="button-row">
-          <button class="md-button md-button--filled">Primary Action</button>
-          <button class="md-button md-button--filled-secondary">Secondary</button>
-          <button class="md-button md-button--filled-tertiary">Tertiary</button>
+    <!-- COMPONENTS -->
+    <section class="section" id="components">
+      <h2 class="section-title">Components</h2>
+
+      <div class="tab-bar">
+        <button class="tab-item tab-item--active" data-tab="tab-buttons" onclick="switchTab(this)">Buttons</button>
+        <button class="tab-item" data-tab="tab-cards" onclick="switchTab(this)">Cards</button>
+        <button class="tab-item" data-tab="tab-inputs" onclick="switchTab(this)">Inputs</button>
+        <button class="tab-item" data-tab="tab-chips" onclick="switchTab(this)">Chips</button>
+        <button class="tab-item" data-tab="tab-feedback" onclick="switchTab(this)">Feedback</button>
+      </div>
+
+      <div class="tab-panel tab-panel--active" id="tab-buttons">
+        <div style="margin-bottom: var(--md-sys-spacing-4);">
+          <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Filled</div>
+          <div class="button-row">
+            <button class="md-button md-button--filled">Primary Action</button>
+            <button class="md-button md-button--filled-secondary">Secondary</button>
+            <button class="md-button md-button--filled-tertiary">Tertiary</button>
+            <button class="md-button md-button--filled" disabled>Disabled</button>
+          </div>
+        </div>
+        <div style="margin-bottom: var(--md-sys-spacing-4);">
+          <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Outlined & Tonal</div>
+          <div class="button-row">
+            <button class="md-button md-button--outlined">Outlined</button>
+            <button class="md-button md-button--tonal">Tonal</button>
+            <button class="md-button md-button--text">Text Button</button>
+            <button class="md-button md-button--outlined" disabled>Disabled</button>
+          </div>
+        </div>
+        <div style="margin-bottom: var(--md-sys-spacing-4);">
+          <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Icon & FAB</div>
+          <div class="button-row">
+            <button class="md-button md-button--icon" title="Search">🔍</button>
+            <button class="md-button md-button--icon" title="Settings">⚙️</button>
+            <button class="md-button md-button--icon" title="More">⋯</button>
+            <button class="md-button md-button--fab" title="Add">＋</button>
+          </div>
         </div>
       </div>
 
-      <div style="margin-bottom: var(--md-sys-spacing-4);">
-        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Outlined & Tonal</div>
-        <div class="button-row">
-          <button class="md-button md-button--outlined">Outlined</button>
-          <button class="md-button md-button--tonal">Tonal</button>
-          <button class="md-button md-button--text">Text Button</button>
+      <div class="tab-panel" id="tab-cards">
+        <div class="component-grid">
+          <div class="md-card md-card--elevated">
+            <div class="md-card-title">Elevated Card</div>
+            <div class="md-card-subtitle">Default elevation style</div>
+            <div class="md-card-body">Elevated cards stand slightly above the surface with a shadow, providing visual hierarchy.</div>
+          </div>
+          <div class="md-card md-card--filled">
+            <div class="md-card-title">Filled Card</div>
+            <div class="md-card-subtitle">Surface container highest</div>
+            <div class="md-card-body">Filled cards use the highest container color, creating strong contrast with the background.</div>
+          </div>
+          <div class="md-card md-card--outlined">
+            <div class="md-card-title">Outlined Card</div>
+            <div class="md-card-subtitle">Bordered, no shadow</div>
+            <div class="md-card-body">Outlined cards use a border for definition — no shadow, flat on the surface.</div>
+          </div>
         </div>
       </div>
 
-      <div style="margin-bottom: var(--md-sys-spacing-4);">
-        <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Icon & FAB</div>
-        <div class="button-row">
-          <button class="md-button md-button--icon" title="Search">🔍</button>
-          <button class="md-button md-button--icon" title="Settings">⚙️</button>
-          <button class="md-button md-button--icon" title="More">⋯</button>
-          <button class="md-button md-button--fab" title="Add">＋</button>
+      <div class="tab-panel" id="tab-inputs">
+        <div style="max-width: 480px;">
+          <div class="md-textfield"><input type="text" id="name" placeholder=" "><label for="name">Name</label></div>
+          <div class="md-textfield"><input type="email" id="email" placeholder=" "><label for="email">Email</label></div>
+          <div class="md-textfield"><input type="text" id="search" placeholder=" "><label for="search">Search</label></div>
+          <div class="md-textfield"><input type="password" id="pass" placeholder=" "><label for="pass">Password</label></div>
         </div>
       </div>
-    </section>
 
-    <hr class="md-divider">
-
-    <!-- CARDS -->
-    <section class="section" id="cards">
-      <h2 class="section-title">Cards</h2>
-      <div class="component-grid">
-        <div class="md-card md-card--elevated">
-          <div class="md-card-title">Elevated Card</div>
-          <div class="md-card-subtitle">Default elevation style</div>
-          <div class="md-card-body">Elevated cards stand slightly above the surface with a shadow, providing visual hierarchy.</div>
-        </div>
-        <div class="md-card md-card--filled">
-          <div class="md-card-title">Filled Card</div>
-          <div class="md-card-subtitle">Surface container highest</div>
-          <div class="md-card-body">Filled cards use the highest container color, creating strong contrast with the background.</div>
-        </div>
-        <div class="md-card md-card--outlined">
-          <div class="md-card-title">Outlined Card</div>
-          <div class="md-card-subtitle">Bordered, no shadow</div>
-          <div class="md-card-body">Outlined cards use a border for definition — no shadow, flat on the surface.</div>
+      <div class="tab-panel" id="tab-chips">
+        <div class="button-row" style="gap: var(--md-sys-spacing-2); flex-wrap: wrap;">
+          <span class="md-chip md-chip--assist">Assist</span>
+          <span class="md-chip md-chip--filter">Filter</span>
+          <span class="md-chip md-chip--suggestion">Suggestion</span>
+          <span class="md-chip md-chip--assist">🎨 Design</span>
+          <span class="md-chip md-chip--filter">✓ Active</span>
+          <span class="md-chip md-chip--suggestion">kaleb.one</span>
         </div>
       </div>
-    </section>
 
-    <hr class="md-divider">
-
-    <!-- INPUTS -->
-    <section class="section" id="inputs">
-      <h2 class="section-title">Text Fields</h2>
-      <div style="max-width: 480px;">
-        <div class="md-textfield">
-          <input type="text" id="name" placeholder=" ">
-          <label for="name">Name</label>
-        </div>
-        <div class="md-textfield">
-          <input type="email" id="email" placeholder=" ">
-          <label for="email">Email</label>
-        </div>
-        <div class="md-textfield">
-          <input type="text" id="search" placeholder=" ">
-          <label for="search">Search</label>
-        </div>
-      </div>
-    </section>
-
-    <hr class="md-divider">
-
-    <!-- CHIPS -->
-    <section class="section" id="chips">
-      <h2 class="section-title">Chips</h2>
-      <div class="button-row" style="gap: var(--md-sys-spacing-2);">
-        <span class="md-chip md-chip--assist">Assist</span>
-        <span class="md-chip md-chip--filter">Filter</span>
-        <span class="md-chip md-chip--suggestion">Suggestion</span>
-        <span class="md-chip md-chip--assist">🎨 Design</span>
-        <span class="md-chip md-chip--filter">✓ Active</span>
-        <span class="md-chip md-chip--suggestion">kaleb.one</span>
-      </div>
-    </section>
-
-    <hr class="md-divider">
-
-    <!-- SNACKBAR -->
-    <section class="section" id="snackbar">
-      <h2 class="section-title">Snackbar & Dialog</h2>
-      <div style="display: flex; flex-direction: column; gap: var(--md-sys-spacing-4); max-width: 560px;">
-        <div class="md-snackbar">
-          Item archived
-          <button class="md-button md-button--text">Undo</button>
-        </div>
-
-        <div class="md-dialog" style="position: relative; max-width: 100%;">
-          <div class="md-dialog-title">Delete project?</div>
-          <div class="md-dialog-body">This will permanently remove the project and all associated data. This action cannot be undone.</div>
-          <div class="md-dialog-actions">
-            <button class="md-button md-button--text">Cancel</button>
-            <button class="md-button md-button--filled" style="background-color: var(--md-sys-color-error);">Delete</button>
+      <div class="tab-panel" id="tab-feedback">
+        <div style="display: flex; flex-direction: column; gap: var(--md-sys-spacing-4); max-width: 560px;">
+          <div class="md-snackbar">Item archived <button class="md-button md-button--text">Undo</button></div>
+          <div class="md-dialog" style="position: relative; max-width: 100%;">
+            <div class="md-dialog-title">Delete project?</div>
+            <div class="md-dialog-body">This will permanently remove the project and all associated data. This action cannot be undone.</div>
+            <div class="md-dialog-actions">
+              <button class="md-button md-button--text">Cancel</button>
+              <button class="md-button md-button--filled" style="background-color: var(--md-sys-color-error);">Delete</button>
+            </div>
           </div>
         </div>
       </div>
@@ -296,10 +510,72 @@
 
     <hr class="md-divider">
 
-    <!-- LISTS -->
-    <section class="section" id="lists">
-      <h2 class="section-title">Lists</h2>
-      <div class="md-list" style="max-width: 480px;">
+    <!-- COMPOSITIONS -->
+    <section class="section" id="compositions">
+      <h2 class="section-title">Component Compositions</h2>
+      <p style="color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-5);">
+        Realistic layouts built entirely from M3 tokens and components.
+      </p>
+
+      <!-- DATA TABLE -->
+      <h3 class="section-subtitle">Data Table</h3>
+      <div class="md-card md-card--outlined" style="margin-bottom:var(--md-sys-spacing-6);overflow:hidden;padding:0;">
+        <div style="padding:var(--md-sys-spacing-4) var(--md-sys-spacing-5);border-bottom:1px solid var(--md-sys-color-outline-variant);display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:var(--md-sys-typescale-title-medium-size);font-weight:var(--md-sys-typescale-title-medium-weight);color:var(--md-sys-color-on-surface);">Services</div>
+            <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);">6 active deployments</div>
+          </div>
+          <div class="button-row">
+            <button class="md-button md-button--outlined" style="font-size:12px;">Filter</button>
+            <button class="md-button md-button--filled" style="font-size:12px;">＋ New</button>
+          </div>
+        </div>
+        <div id="data-table-rows" style="padding:var(--md-sys-spacing-2);"></div>
+      </div>
+
+      <!-- SETTINGS FORM -->
+      <h3 class="section-subtitle">Settings Form</h3>
+      <div class="md-card md-card--elevated" style="margin-bottom:var(--md-sys-spacing-6);max-width:560px;">
+        <div class="md-card-title">Profile Settings</div>
+        <div class="md-card-body" style="margin-top:var(--md-sys-spacing-3);">
+          <div class="md-textfield" style="margin-bottom:var(--md-sys-spacing-3);"><input type="text" id="s-name" placeholder=" "><label for="s-name">Display Name</label></div>
+          <div class="md-textfield" style="margin-bottom:var(--md-sys-spacing-3);"><input type="email" id="s-email" placeholder=" "><label for="s-email">Email Address</label></div>
+          <div class="md-textfield" style="margin-bottom:var(--md-sys-spacing-4);"><input type="text" id="s-org" placeholder=" "><label for="s-org">Organization</label></div>
+          <div class="button-row">
+            <button class="md-button md-button--filled">Save Changes</button>
+            <button class="md-button md-button--text">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINI DASHBOARD -->
+      <h3 class="section-subtitle">Dashboard</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--md-sys-spacing-4);margin-bottom:var(--md-sys-spacing-6);">
+        <div class="md-card md-card--filled">
+          <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);">Uptime</div>
+          <div style="font-size:var(--md-sys-typescale-display-small-size);font-weight:var(--md-sys-typescale-display-small-weight);color:var(--md-sys-color-primary);margin:var(--md-sys-spacing-1) 0;">99.8%</div>
+          <div class="md-progress-linear" style="margin-top:var(--md-sys-spacing-2);"><div class="md-progress-linear__bar" style="width:99.8%;"></div></div>
+        </div>
+        <div class="md-card md-card--filled">
+          <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);">Requests (24h)</div>
+          <div style="font-size:var(--md-sys-typescale-display-small-size);font-weight:var(--md-sys-typescale-display-small-weight);color:var(--md-sys-color-primary);margin:var(--md-sys-spacing-1) 0;">12.4M</div>
+          <div class="md-progress-linear" style="margin-top:var(--md-sys-spacing-2);"><div class="md-progress-linear__bar" style="width:82%;"></div></div>
+        </div>
+        <div class="md-card md-card--filled">
+          <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);">Errors</div>
+          <div style="font-size:var(--md-sys-typescale-display-small-size);font-weight:var(--md-sys-typescale-display-small-weight);color:var(--md-sys-color-error);margin:var(--md-sys-spacing-1) 0;">23</div>
+          <div class="md-progress-linear" style="margin-top:var(--md-sys-spacing-2);"><div class="md-progress-linear__bar" style="width:2%;background-color:var(--md-sys-color-error);"></div></div>
+        </div>
+        <div class="md-card md-card--filled">
+          <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);">Latency (p99)</div>
+          <div style="font-size:var(--md-sys-typescale-display-small-size);font-weight:var(--md-sys-typescale-display-small-weight);color:var(--md-sys-color-tertiary);margin:var(--md-sys-spacing-1) 0;">142ms</div>
+          <div class="md-progress-linear" style="margin-top:var(--md-sys-spacing-2);"><div class="md-progress-linear__bar" style="width:28%;background-color:var(--md-sys-color-tertiary);"></div></div>
+        </div>
+      </div>
+
+      <!-- LIST WITH TRAILING -->
+      <h3 class="section-subtitle">Navigation List</h3>
+      <div class="md-list" style="max-width:480px;">
         <div class="md-list-item">
           <div class="md-list-item-icon">📥</div>
           <div class="md-list-item-text">
@@ -322,66 +598,78 @@
           </div>
         </div>
       </div>
-
-      <h3 style="font-size: var(--md-sys-typescale-title-medium-size); color: var(--md-sys-color-on-surface); margin: var(--md-sys-spacing-5) 0 var(--md-sys-spacing-3);">Progress</h3>
-      <div style="max-width: 480px;">
-        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 75%;"></div></div>
-        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 45%;"></div></div>
-        <div class="md-progress-linear"><div class="md-progress-linear__bar" style="width: 15%; background-color: var(--md-sys-color-error);"></div></div>
-      </div>
     </section>
 
     <hr class="md-divider">
 
-    <!-- MOTION -->
-    <section class="section" id="motion">
-      <h2 class="section-title">Motion & Shape</h2>
-      <div class="component-grid">
-        <div class="md-card md-card--outlined">
-          <div class="md-card-title">Corner Radii</div>
-          <div style="display: grid; gap: var(--md-sys-spacing-2); margin-top: var(--md-sys-spacing-2);">
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: var(--md-sys-shape-corner-none); text-align: center;">None (0px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-extra-small); text-align: center;">XS (4px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); border-radius: var(--md-sys-shape-corner-small); text-align: center;">Small (8px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); border-radius: var(--md-sys-shape-corner-medium); text-align: center;">Medium (12px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); border-radius: var(--md-sys-shape-corner-large); text-align: center;">Large (16px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); border-radius: var(--md-sys-shape-corner-extra-large); text-align: center;">XL (28px)</div>
-            <div style="padding: var(--md-sys-spacing-2); background-color: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); border-radius: var(--md-sys-shape-corner-full); text-align: center;">Full (pill)</div>
-          </div>
-        </div>
-        <div class="md-card md-card--outlined">
-          <div class="md-card-title">Spacing Scale</div>
-          <div style="display: grid; gap: var(--md-sys-spacing-1); margin-top: var(--md-sys-spacing-2);">
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-1); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">4px — xs</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-2); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">8px — sm</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-3); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">12px — md</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-4); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">16px — base</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-6); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">24px — lg</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-8); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">32px — xl</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: var(--md-sys-spacing-2);">
-              <div style="width: var(--md-sys-spacing-12); height: 16px; background-color: var(--md-sys-color-primary);"></div>
-              <span style="font-family: var(--md-sys-font-family-mono); font-size: var(--md-sys-typescale-label-small-size);">48px — 2xl</span>
-            </div>
-          </div>
-        </div>
+    <!-- PLAYGROUND -->
+    <section class="section" id="playground">
+      <h2 class="section-title">Palette Playground</h2>
+      <p style="color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-4);">
+        Pick a source color to see how M3 role derivation works. All colors are computed client-side using the HCT color space algorithm.
+      </p>
+
+      <div class="color-input-row">
+        <label style="font-size:var(--md-sys-typescale-label-large-size);color:var(--md-sys-color-on-surface);">Source color:</label>
+        <input type="color" id="palette-gen-input" value="#7B8FA8" style="width:48px;height:36px;border:none;cursor:pointer;border-radius:var(--md-sys-shape-corner-small);">
+        <span id="palette-gen-hex" style="font-family:var(--md-sys-font-family-mono);font-size:var(--md-sys-typescale-label-medium-size);color:var(--md-sys-color-on-surface-variant);">#7B8FA8</span>
+        <button class="md-button md-button--outlined" style="font-size:12px;" onclick="randomSourceColor()">🎲 Random</button>
+      </div>
+
+      <h3 class="section-subtitle">Derived Color Roles</h3>
+      <div class="palette-gen-preview" id="palette-gen-preview"></div>
+
+      <h3 class="section-subtitle" style="margin-top:var(--md-sys-spacing-6);">Palette Comparison</h3>
+      <div class="palette-compare" id="palette-compare"></div>
+    </section>
+
+    <hr class="md-divider">
+
+    <!-- EXPORT -->
+    <section class="section" id="export">
+      <h2 class="section-title">Code Export</h2>
+      <p style="color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-5);">
+        Copy theme integration snippets for your project.
+      </p>
+
+      <h3 class="section-subtitle">CDN (HTML / Static pages)</h3>
+      <div class="code-block" id="code-cdn"><div class="code-copy-btn" onclick="copyCode('code-cdn')">Copy</div>
+&lt;!-- Load theme --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/triursa/theme-kaleb-one@main/dist/theme-all.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/triursa/theme-kaleb-one@main/dist/components.css"&gt;
+
+&lt;!-- Load fonts --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"&gt;
+
+&lt;!-- Activate palette --&gt;
+&lt;html data-theme="obsidian"&gt;
+      </div>
+
+      <h3 class="section-subtitle">npm (Build-tool projects)</h3>
+      <div class="code-block" id="code-npm"><div class="code-copy-btn" onclick="copyCode('code-npm')">Copy</div>
+npm install @kaleb-one/theme
+
+// Import in JS:
+import '@kaleb-one/theme/css/all';
+import '@kaleb-one/theme/css/components';
+
+// Or single palette:
+import '@kaleb-one/theme/css/obsidian';
+      </div>
+
+      <h3 class="section-subtitle">Tailwind Preset</h3>
+      <div class="code-block" id="code-tailwind"><div class="code-copy-btn" onclick="copyCode('code-tailwind')">Copy</div>
+// tailwind.config.js
+module.exports = {
+  presets: [require('@kaleb-one/theme/tailwind')],
+};
+      </div>
+
+      <h3 class="section-subtitle">Custom Token Values (Current Palette)</h3>
+      <div class="code-block" id="code-tokens" style="max-height:300px;overflow-y:auto;"><div class="code-copy-btn" onclick="copyCode('code-tokens')">Copy</div>
+Loading tokens...
       </div>
     </section>
 
@@ -389,47 +677,468 @@
     <section style="margin-top: var(--md-sys-spacing-8); padding: var(--md-sys-spacing-6) 0; border-top: 1px solid var(--md-sys-color-outline-variant);">
       <p style="font-size: var(--md-sys-typescale-body-small-size); color: var(--md-sys-color-on-surface-variant); text-align: center;">
         theme-kaleb-one · Material Design 3 · kaleb.one ecosystem<br>
-        Palettes: <span id="footer-palettes">Obsidian · Midnight Ocean · Volcanic · Frost</span>
+        Palettes: Obsidian · Midnight Ocean · Volcanic · Frost
       </p>
     </section>
-
   </main>
 
   <script>
+    // === PALETTE DATA ===
     const palettes = {
-      'obsidian': { name: 'Obsidian', desc: 'Dark slate, electric accent — sharp, modern, minimal' },
-      'midnight-ocean': { name: 'Midnight Ocean', desc: 'Deep navy, teal accent — calm authority' },
-      'volcanic': { name: 'Volcanic', desc: 'Dark warm gray, amber/orange accent — warm, grounded' },
-      'frost': { name: 'Frost', desc: 'Light theme — cool gray, blue accent — clean, professional' }
+      'obsidian': { name: 'Obsidian', desc: 'Dark slate, electric accent — sharp, modern, minimal', source: '#7B8FA8' },
+      'midnight-ocean': { name: 'Midnight Ocean', desc: 'Deep navy, teal accent — calm authority', source: '#4A90D9' },
+      'volcanic': { name: 'Volcanic', desc: 'Dark warm gray, amber/orange accent — warm, grounded', source: '#D4853A' },
+      'frost': { name: 'Frost', desc: 'Light theme — cool gray, blue accent — clean, professional', source: '#3B82F6' }
     };
 
-    function setPalette(name) {
-      document.documentElement.setAttribute('data-theme', name);
-      
-      // Update active button
-      document.querySelectorAll('.palette-btn').forEach(btn => {
-        btn.classList.toggle('palette-btn--active', btn.dataset.palette === name);
-      });
-      
-      // Update info
-      const info = palettes[name];
-      document.getElementById('active-palette-name').textContent = info.name;
-      document.getElementById('active-palette-desc').textContent = info.desc;
-      
-      // Update nav rail active state
-      document.querySelectorAll('.nav-rail-item').forEach(item => {
-        item.classList.remove('nav-rail-item--active');
+    // Token definitions for the inspector
+    const colorTokens = [
+      { name: '--md-sys-color-primary', label: 'Primary' },
+      { name: '--md-sys-color-on-primary', label: 'On Primary' },
+      { name: '--md-sys-color-primary-container', label: 'Primary Container' },
+      { name: '--md-sys-color-on-primary-container', label: 'On Prim. Container' },
+      { name: '--md-sys-color-secondary', label: 'Secondary' },
+      { name: '--md-sys-color-on-secondary', label: 'On Secondary' },
+      { name: '--md-sys-color-secondary-container', label: 'Secondary Container' },
+      { name: '--md-sys-color-on-secondary-container', label: 'On Sec. Container' },
+      { name: '--md-sys-color-tertiary', label: 'Tertiary' },
+      { name: '--md-sys-color-on-tertiary', label: 'On Tertiary' },
+      { name: '--md-sys-color-tertiary-container', label: 'Tertiary Container' },
+      { name: '--md-sys-color-on-tertiary-container', label: 'On Ter. Container' },
+    ];
+
+    const errorTokens = [
+      { name: '--md-sys-color-error', label: 'Error' },
+      { name: '--md-sys-color-on-error', label: 'On Error' },
+      { name: '--md-sys-color-error-container', label: 'Error Container' },
+      { name: '--md-sys-color-on-error-container', label: 'On Error Container' },
+    ];
+
+    const surfaceTokens = [
+      { name: '--md-sys-color-surface', label: 'Surface' },
+      { name: '--md-sys-color-on-surface', label: 'On Surface' },
+      { name: '--md-sys-color-surface-variant', label: 'Surface Variant' },
+      { name: '--md-sys-color-on-surface-variant', label: 'On Surface Variant' },
+      { name: '--md-sys-color-surface-container-lowest', label: 'Container Lowest' },
+      { name: '--md-sys-color-surface-container-low', label: 'Container Low' },
+      { name: '--md-sys-color-surface-container', label: 'Container' },
+      { name: '--md-sys-color-surface-container-high', label: 'Container High' },
+      { name: '--md-sys-color-surface-container-highest', label: 'Container Highest' },
+      { name: '--md-sys-color-outline', label: 'Outline' },
+      { name: '--md-sys-color-outline-variant', label: 'Outline Variant' },
+      { name: '--md-sys-color-inverse-surface', label: 'Inverse Surface' },
+      { name: '--md-sys-color-inverse-on-surface', label: 'Inverse On Surface' },
+      { name: '--md-sys-color-inverse-primary', label: 'Inverse Primary' },
+    ];
+
+    const typeScale = [
+      { name: 'Display Large', size: 57, weight: 400, line: 64 },
+      { name: 'Display Medium', size: 45, weight: 400, line: 52 },
+      { name: 'Display Small', size: 36, weight: 400, line: 44 },
+      { name: 'Headline Large', size: 32, weight: 400, line: 40 },
+      { name: 'Headline Medium', size: 28, weight: 400, line: 36 },
+      { name: 'Headline Small', size: 24, weight: 400, line: 32 },
+      { name: 'Title Large', size: 22, weight: 500, line: 28 },
+      { name: 'Title Medium', size: 16, weight: 500, line: 24 },
+      { name: 'Title Small', size: 14, weight: 500, line: 20 },
+      { name: 'Body Large', size: 16, weight: 400, line: 24 },
+      { name: 'Body Medium', size: 14, weight: 400, line: 20 },
+      { name: 'Body Small', size: 12, weight: 400, line: 16 },
+      { name: 'Label Large', size: 14, weight: 500, line: 20 },
+      { name: 'Label Medium', size: 12, weight: 500, line: 16 },
+      { name: 'Label Small', size: 11, weight: 500, line: 16 },
+    ];
+
+    // === HELPER: get computed token value ===
+    function getTokenValue(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    // === HELPER: copy to clipboard ===
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('copy-toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1500);
       });
     }
 
-    // Nav rail active state
+    // === BUILD SWATCHES ===
+    function buildSwatches(containerId, tokens) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = tokens.map(t => {
+        const val = getTokenValue(t.name);
+        const needsBorder = ['on-primary','on-secondary','on-tertiary','on-error','inverse-surface'].some(k => t.name.includes(k));
+        return `<div class="swatch" onclick="copyText('var(${t.name})')" title="Click to copy token">
+          <div class="swatch-color" style="background-color:var(${t.name});${needsBorder ? 'border-bottom:1px solid var(--md-sys-color-outline-variant);' : ''}"></div>
+          <div class="swatch-label">
+            <span class="swatch-name">${t.label}</span>
+            <span class="swatch-value" onclick="event.stopPropagation();copyText('${val}')">${val}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function refreshSwatches() {
+      buildSwatches('core-swatches', colorTokens);
+      buildSwatches('error-swatches', errorTokens);
+      buildSwatches('surface-swatches', surfaceTokens);
+    }
+
+    // === BUILD TYPOGRAPHY ===
+    function buildTypography() {
+      const el = document.getElementById('type-showcase');
+      el.innerHTML = typeScale.map(t => {
+        const key = t.name.toLowerCase().replace(' ', '-');
+        return `<div>
+          <span class="type-label">${t.name} — ${t.size}px / ${t.weight}w / ${t.line}px</span>
+          <div style="font-size:var(--md-sys-typescale-${key}-size);font-weight:var(--md-sys-typescale-${key}-weight);line-height:var(--md-sys-typescale-${key}-line-height);letter-spacing:var(--md-sys-typescale-${key}-tracking,0);color:var(--md-sys-color-on-surface);">
+            The quick brown fox
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // === BUILD ELEVATION ===
+    function buildElevation() {
+      const el = document.getElementById('elevation-grid');
+      el.innerHTML = [0,1,2,3,4,5].map(i => {
+        const descs = ['No elevation — flat surface','Subtle lift — cards at rest','Medium lift — lifted cards','High lift — dialogs, menus','Search bar, snackbar','Modal — max elevation'];
+        return `<div class="md-card" style="box-shadow:var(--md-sys-elevation-${i});${i > 0 ? 'background-color:color-mix(in srgb, var(--md-sys-color-primary) ' + (i*3) + '%, var(--md-sys-color-surface));' : ''}">
+          <div class="md-card-title">Level ${i}</div>
+          <div class="md-card-body">${descs[i]}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // === BUILD DATA TABLE ===
+    function buildDataTable() {
+      const services = [
+        { name: 'cinema.kaleb.one', type: 'Docker', status: 'Running', port: ':3001' },
+        { name: 'lore.kaleb.one', type: 'LaunchAgent', status: 'Running', port: ':8199' },
+        { name: 'status.kaleb.one', type: 'Docker', status: 'Running', port: ':8080' },
+        { name: 'masks.kaleb.one', type: 'Docker', status: 'Running', port: ':3000' },
+        { name: 'viddl.kaleb.one', type: 'LaunchAgent', status: 'Running', port: ':3100' },
+        { name: 'wiki.kaleb.one', type: 'Docker', status: 'Running', port: ':3101' },
+      ];
+      const el = document.getElementById('data-table-rows');
+      el.innerHTML = services.map(s => {
+        const statusColor = s.status === 'Running' ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-error)';
+        const statusBg = s.status === 'Running' ? 'var(--md-sys-color-primary-container)' : 'var(--md-sys-color-error-container)';
+        const statusOnBg = s.status === 'Running' ? 'var(--md-sys-color-on-primary-container)' : 'var(--md-sys-color-on-error-container)';
+        return `<div style="display:grid;grid-template-columns:1fr auto auto auto;gap:var(--md-sys-spacing-4);padding:var(--md-sys-spacing-3) var(--md-sys-spacing-4);align-items:center;border-radius:var(--md-sys-shape-corner-small);margin-bottom:2px;font-size:var(--md-sys-typescale-body-medium-size);">
+          <span style="color:var(--md-sys-color-on-surface);font-family:var(--md-sys-font-family-mono);font-size:var(--md-sys-typescale-body-small-size);">${s.name}</span>
+          <span style="color:var(--md-sys-color-on-surface-variant);">${s.type}</span>
+          <span style="background:${statusBg};color:${statusOnBg};padding:2px var(--md-sys-spacing-2);border-radius:var(--md-sys-shape-corner-full);font-size:var(--md-sys-typescale-label-small-size);">${s.status}</span>
+          <span style="color:var(--md-sys-color-on-surface-variant);font-family:var(--md-sys-font-family-mono);font-size:var(--md-sys-typescale-label-small-size);">${s.port}</span>
+        </div>`;
+      }).join('');
+    }
+
+    // === PALETTE GENERATOR (simplified HCT derivation) ===
+    function hexToHSL(hex) {
+      let r = parseInt(hex.slice(1,3),16)/255;
+      let g = parseInt(hex.slice(3,5),16)/255;
+      let b = parseInt(hex.slice(5,7),16)/255;
+      const max = Math.max(r,g,b), min = Math.min(r,g,b);
+      let h, s, l = (max+min)/2;
+      if (max === min) { h = s = 0; }
+      else {
+        const d = max - min;
+        s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+        if (max === r) h = ((g-b)/d + (g < b ? 6 : 0))/6;
+        else if (max === g) h = ((b-r)/d + 2)/6;
+        else h = ((r-g)/d + 4)/6;
+      }
+      return { h: h*360, s: s*100, l: l*100 };
+    }
+
+    function hslToHex(h, s, l) {
+      h = ((h % 360) + 360) % 360;
+      s = Math.max(0, Math.min(100, s));
+      l = Math.max(0, Math.min(100, l));
+      const a = s/100 * Math.min(l/100, 1 - l/100);
+      const f = n => {
+        const k = (n + h/30) % 12;
+        const color = l/100 - a * Math.max(Math.min(k-3, 9-k, 1), -1);
+        return Math.round(255 * color).toString(16).padStart(2, '0');
+      };
+      return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function deriveRoles(hex) {
+      const hsl = hexToHSL(hex);
+      const isDark = hsl.l < 50;
+      const roles = {};
+
+      if (isDark) {
+        roles['Primary'] = hslToHex(hsl.h, Math.min(hsl.s + 10, 80), 75);
+        roles['On Primary'] = hslToHex(hsl.h, hsl.s, 15);
+        roles['Primary Container'] = hslToHex(hsl.h, hsl.s, 25);
+        roles['On Primary Container'] = hslToHex(hsl.h, Math.min(hsl.s + 5, 80), 85);
+        roles['Secondary'] = hslToHex(hsl.h + 30, 20, 70);
+        roles['On Secondary'] = hslToHex(hsl.h + 30, 20, 15);
+        roles['Secondary Container'] = hslToHex(hsl.h + 30, 20, 22);
+        roles['On Secondary Container'] = hslToHex(hsl.h + 30, 20, 82);
+        roles['Tertiary'] = hslToHex(hsl.h - 60, 25, 72);
+        roles['On Tertiary'] = hslToHex(hsl.h - 60, 25, 15);
+        roles['Tertiary Container'] = hslToHex(hsl.h - 60, 25, 22);
+        roles['On Tertiary Container'] = hslToHex(hsl.h - 60, 25, 82);
+        roles['Error'] = '#FFB4AB';
+        roles['On Error'] = '#690005';
+        roles['Error Container'] = '#93000A';
+        roles['On Error Container'] = '#FFDAD6';
+        roles['Surface'] = hslToHex(hsl.h, 12, 8);
+        roles['On Surface'] = hslToHex(hsl.h, 12, 86);
+        roles['Surface Container Low'] = hslToHex(hsl.h, 12, 10);
+        roles['Surface Container'] = hslToHex(hsl.h, 12, 12);
+        roles['Surface Container High'] = hslToHex(hsl.h, 12, 16);
+        roles['Surface Container Highest'] = hslToHex(hsl.h, 12, 19);
+        roles['Outline'] = hslToHex(hsl.h, 10, 56);
+        roles['Outline Variant'] = hslToHex(hsl.h, 10, 28);
+      } else {
+        roles['Primary'] = hslToHex(hsl.h, Math.min(hsl.s + 10, 90), 40);
+        roles['On Primary'] = '#FFFFFF';
+        roles['Primary Container'] = hslToHex(hsl.h, hsl.s, 85);
+        roles['On Primary Container'] = hslToHex(hsl.h, hsl.s, 15);
+        roles['Secondary'] = hslToHex(hsl.h + 30, 20, 40);
+        roles['On Secondary'] = '#FFFFFF';
+        roles['Secondary Container'] = hslToHex(hsl.h + 30, 15, 90);
+        roles['On Secondary Container'] = hslToHex(hsl.h + 30, 20, 15);
+        roles['Tertiary'] = hslToHex(hsl.h - 60, 25, 40);
+        roles['On Tertiary'] = '#FFFFFF';
+        roles['Error'] = '#BA1A1A';
+        roles['On Error'] = '#FFFFFF';
+        roles['Error Container'] = '#FFDAD6';
+        roles['On Error Container'] = '#410002';
+        roles['Surface'] = hslToHex(hsl.h, 12, 97);
+        roles['On Surface'] = hslToHex(hsl.h, 12, 10);
+        roles['Surface Container Low'] = hslToHex(hsl.h, 10, 95);
+        roles['Surface Container'] = hslToHex(hsl.h, 10, 93);
+        roles['Surface Container High'] = hslToHex(hsl.h, 10, 90);
+        roles['Surface Container Highest'] = hslToHex(hsl.h, 10, 87);
+        roles['Outline'] = hslToHex(hsl.h, 10, 45);
+        roles['Outline Variant'] = hslToHex(hsl.h, 10, 78);
+      }
+      return roles;
+    }
+
+    function buildPaletteGen(hex) {
+      const roles = deriveRoles(hex);
+      const el = document.getElementById('palette-gen-preview');
+      const isDark = hexToHSL(hex).l < 50;
+      el.innerHTML = Object.entries(roles).map(([name, color]) => {
+        const textColor = isDark
+          ? (['On Primary','On Secondary','On Tertiary','On Error','On Primary Container','On Secondary Container','On Tertiary Container','On Error Container'].includes(name) ? '#111418' : '#DCE1E9')
+          : (['On Primary','On Secondary','On Tertiary','On Error'].includes(name) ? '#FFFFFF' : '#1B1B1F');
+        return `<div class="palette-gen-swatch" style="background:${color};color:${textColor};" onclick="copyText('${color}')">
+          <div style="font-weight:500;font-size:var(--md-sys-typescale-label-medium-size);">${name}</div>
+          <div class="palette-gen-label">${color}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function buildPaletteCompare() {
+      const el = document.getElementById('palette-compare');
+      el.innerHTML = Object.entries(palettes).map(([key, p]) => {
+        const roles = deriveRoles(p.source);
+        const swatches = ['Primary','Primary Container','Secondary','Secondary Container','Tertiary','Tertiary Container','Surface','Surface Container','Error'].map(n =>
+          `<div style="flex:1;height:32px;background:${roles[n]};border-radius:var(--md-sys-shape-corner-small);"></div>`
+        ).join('');
+        return `<div class="palette-compare-card">
+          <div style="font-size:var(--md-sys-typescale-title-medium-size);font-weight:var(--md-sys-typescale-title-medium-weight);color:var(--md-sys-color-on-surface);margin-bottom:var(--md-sys-spacing-2);">${p.name}</div>
+          <div style="font-size:var(--md-sys-typescale-body-small-size);color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-3);">${p.desc}</div>
+          <div style="display:flex;gap:2px;border-radius:var(--md-sys-shape-corner-medium);overflow:hidden;">${swatches}</div>
+          <div style="font-family:var(--md-sys-font-family-mono);font-size:11px;color:var(--md-sys-color-on-surface-variant);margin-top:var(--md-sys-spacing-2);">Source: ${p.source}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function randomSourceColor() {
+      const hex = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+      document.getElementById('palette-gen-input').value = hex;
+      document.getElementById('palette-gen-hex').textContent = hex;
+      buildPaletteGen(hex);
+    }
+
+    // === TOKEN INSPECTOR ===
+    let inspectMode = false;
+
+    function toggleInspect() {
+      inspectMode = !inspectMode;
+      document.getElementById('main-content').classList.toggle('inspect-mode', inspectMode);
+      const btn = document.getElementById('inspect-toggle');
+      btn.classList.toggle('palette-btn--active', inspectMode);
+      btn.style.backgroundColor = inspectMode ? 'var(--md-sys-color-primary-container)' : '';
+      btn.style.color = inspectMode ? 'var(--md-sys-color-on-primary-container)' : '';
+      if (inspectMode) {
+        document.getElementById('inspector-panel').classList.add('open');
+        document.addEventListener('click', handleInspectClick, true);
+      } else {
+        document.getElementById('inspector-panel').classList.remove('open');
+        document.removeEventListener('click', handleInspectClick, true);
+      }
+    }
+
+    function closeInspector() {
+      inspectMode = false;
+      document.getElementById('main-content').classList.remove('inspect-mode');
+      document.getElementById('inspector-panel').classList.remove('open');
+      document.getElementById('inspect-toggle').classList.remove('palette-btn--active');
+      document.getElementById('inspect-toggle').style.backgroundColor = '';
+      document.getElementById('inspect-toggle').style.color = '';
+      document.removeEventListener('click', handleInspectClick, true);
+    }
+
+    function handleInspectClick(e) {
+      if (!inspectMode) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const el = e.target;
+      const style = getComputedStyle(el);
+      const tokens = {};
+
+      // Collect relevant M3 tokens
+      const allColorTokens = [...colorTokens, ...errorTokens, ...surfaceTokens];
+      const rootStyle = getComputedStyle(document.documentElement);
+
+      // Find matching color tokens
+      const bgColor = style.backgroundColor;
+      const fgColor = style.color;
+      const borderColor = style.borderColor;
+
+      allColorTokens.forEach(t => {
+        const rootVal = rootStyle.getPropertyValue(t.name).trim();
+        if (bgColor && rootVal && bgColor.includes(rootVal.replace('#', ''))) {
+          tokens[t.name] = { value: rootVal, type: 'background' };
+        }
+      });
+
+      // Always show computed styles
+      let html = `<div style="font-size:var(--md-sys-typescale-label-medium-size);color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-3);">&lt;${el.tagName.toLowerCase()}&gt; ${el.className ? '.' + el.className.split(' ').join('.') : ''}</div>`;
+
+      const props = [
+        ['background-color', style.backgroundColor],
+        ['color', style.color],
+        ['border-color', style.borderColor],
+        ['font-size', style.fontSize],
+        ['font-weight', style.fontWeight],
+        ['line-height', style.lineHeight],
+        ['border-radius', style.borderRadius],
+        ['padding', style.padding],
+        ['margin', style.margin],
+        ['box-shadow', style.boxShadow],
+      ];
+
+      props.forEach(([prop, val]) => {
+        if (val && val !== 'none' && val !== '0px' && val !== 'rgba(0, 0, 0, 0)') {
+          html += `<div class="inspector-token-row">
+            <span class="inspector-token-name">${prop}</span>
+            <span class="inspector-token-val" onclick="copyText('${val}')" style="cursor:pointer;">${val.length > 30 ? val.substring(0,30)+'…' : val}</span>
+          </div>`;
+        }
+      });
+
+      // Find any matching CSS custom properties
+      const cssVars = el.style.cssText ? el.style.cssText.split(';').filter(s => s.includes('--md-sys')) : [];
+      if (cssVars.length) {
+        html += `<div style="margin-top:var(--md-sys-spacing-3);font-size:var(--md-sys-typescale-label-medium-size);color:var(--md-sys-color-primary);">Design Tokens Used</div>`;
+        cssVars.forEach(v => {
+          const [name, val] = v.split(':').map(s => s.trim());
+          if (name) {
+            html += `<div class="inspector-token-row">
+              <span class="inspector-token-name" style="color:var(--md-sys-color-primary);">${name}</span>
+              <span class="inspector-token-val" onclick="copyText('var(${name})')" style="cursor:pointer;">var(${name})</span>
+            </div>`;
+          }
+        });
+      }
+
+      document.getElementById('inspector-body').innerHTML = html;
+    }
+
+    document.getElementById('inspect-toggle').addEventListener('click', toggleInspect);
+
+    // === COPY CODE BLOCK ===
+    function copyCode(id) {
+      const el = document.getElementById(id);
+      const text = el.textContent.replace('Copy', '').trim();
+      copyText(text);
+    }
+
+    // === TAB SWITCHING ===
+    function switchTab(btn) {
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.toggle('tab-item--active', t.dataset.tab === tabId));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('tab-panel--active', p.id === tabId));
+    }
+
+    // === PALETTE SWITCHING ===
+    function setPalette(name) {
+      document.documentElement.setAttribute('data-theme', name);
+      document.querySelectorAll('.palette-btn[data-palette]').forEach(btn => {
+        btn.classList.toggle('palette-btn--active', btn.dataset.palette === name);
+      });
+      const info = palettes[name];
+      document.getElementById('active-palette-name').textContent = info.name;
+      document.getElementById('active-palette-desc').textContent = info.desc;
+
+      // Re-render dynamic sections with updated token values
+      setTimeout(() => {
+        refreshSwatches();
+        buildPaletteGen(document.getElementById('palette-gen-input').value);
+        buildPaletteCompare();
+        updateTokenExport();
+      }, 50);
+    }
+
+    // === TOKEN EXPORT ===
+    function updateTokenExport() {
+      const allTokens = [...colorTokens, ...errorTokens, ...surfaceTokens];
+      const lines = allTokens.map(t => {
+        const val = getTokenValue(t.name);
+        return `${t.name}: ${val};`;
+      });
+      // Add type scale
+      typeScale.forEach(t => {
+        const key = t.name.toLowerCase().replace(' ', '-');
+        try {
+          ['size','weight','line-height'].forEach(prop => {
+            const v = getTokenValue(`--md-sys-typescale-${key}-${prop}`);
+            if (v) lines.push(`--md-sys-typescale-${key}-${prop}: ${v};`);
+          });
+        } catch(e) {}
+      });
+      document.getElementById('code-tokens').innerHTML =
+        `<div class="code-copy-btn" onclick="copyCode('code-tokens')">Copy</div>/* Current palette: ${palettes[document.documentElement.getAttribute('data-theme') || 'obsidian'].name} */\n${lines.join('\n')}`;
+    }
+
+    // === NAV RAIL ACTIVE STATE ===
     document.querySelectorAll('.nav-rail-item').forEach(item => {
       item.addEventListener('click', function() {
         document.querySelectorAll('.nav-rail-item').forEach(i => i.classList.remove('nav-rail-item--active'));
         this.classList.add('nav-rail-item--active');
       });
     });
-  </script>
 
+    // === PALETTE GENERATOR INPUT ===
+    document.getElementById('palette-gen-input').addEventListener('input', function() {
+      document.getElementById('palette-gen-hex').textContent = this.value;
+      buildPaletteGen(this.value);
+    });
+
+    // === INIT ===
+    function init() {
+      refreshSwatches();
+      buildTypography();
+      buildElevation();
+      buildDataTable();
+      buildPaletteGen('#7B8FA8');
+      buildPaletteCompare();
+      updateTokenExport();
+    }
+
+    init();
+  </script>
 </body>
 </html>
