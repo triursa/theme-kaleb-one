@@ -9,6 +9,8 @@ const spacing = require('../src/tokens/spacing/grid');
 const elevation = require('../src/tokens/elevation/shadows');
 const shape = require('../src/tokens/shape/corners');
 const motion = require('../src/tokens/motion/transitions');
+const breakpoints = require('../src/tokens/layout/breakpoints');
+const scaffold = require('../src/tokens/layout/scaffold');
 
 const distDir = path.join(__dirname, '..', 'dist');
 const showcaseDir = path.join(__dirname, '..', 'showcase');
@@ -64,6 +66,18 @@ function buildUtilityCSS() {
 
   css += `/* === Motion — Easing === */\n:root {\n`;
   for (const [k, v] of Object.entries(motion.easing)) {
+    css += `  --${k}: ${v};\n`;
+  }
+  css += `}\n\n`;
+
+  css += `/* === Breakpoints — M3 I/O 2026 === */\n:root {\n`;
+  for (const [k, v] of Object.entries(breakpoints)) {
+    css += `  --${k}: ${v};\n`;
+  }
+  css += `}\n\n`;
+
+  css += `/* === Layout Scaffold — M3 I/O 2026 === */\n:root {\n`;
+  for (const [k, v] of Object.entries(scaffold)) {
     css += `  --${k}: ${v};\n`;
   }
   css += `}\n\n`;
@@ -169,6 +183,21 @@ function buildTailwindPreset(tokens) {
     ])
   );
 
+  // Layout tokens — M3 I/O 2026
+  const breakpointMap = Object.fromEntries(
+    Object.entries(tokens.breakpoints).map(([k, v]) => [
+      k.replace('md-sys-breakpoint-', 'm3-'),
+      v
+    ])
+  );
+
+  const scaffoldMap = Object.fromEntries(
+    Object.entries(tokens.scaffold).map(([k, v]) => [
+      k.replace('md-sys-layout-', 'm3-layout-'),
+      v
+    ])
+  );
+
   const js = `/**
  * @kaleb-one/theme — Tailwind CSS preset (auto-generated)
  *
@@ -187,6 +216,10 @@ function buildTailwindPreset(tokens) {
  *   // Tokens available as CSS custom properties, use via arbitrary values:
  *   // bg-[var(--md-sys-color-surface)]
  *   // text-[var(--md-sys-color-on-surface)]
+ *
+ * Breakpoints and layout tokens are also available:
+ *   // @screen m3-medium → min-width: 600px
+ *   // p-m3-layout-2 → padding: 16px (layout spacing)
  */
 
 module.exports = {
@@ -203,6 +236,8 @@ module.exports = {
       }, null, 6)},
       transitionDuration: ${JSON.stringify(durationMap, null, 6)},
       transitionTimingFunction: ${JSON.stringify(easingMap, null, 6)},
+      screens: ${JSON.stringify(breakpointMap, null, 8)},
+      layout: ${JSON.stringify(scaffoldMap, null, 8)},
     },
   },
 };
@@ -236,6 +271,8 @@ const tokens = {
   elevation,
   shape,
   motion,
+  breakpoints,
+  scaffold,
 };
 for (const [key, palette] of Object.entries(palettes)) {
   const slug = key.replace(/([A-Z])/g, '-$1').toLowerCase();

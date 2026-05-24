@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/dist/theme-all.css">
-  <link rel="stylesheet" href="/dist/components.css">
+  <link rel="stylesheet" href="/dist/theme-all.css?v=0.2.0">
+  <link rel="stylesheet" href="/dist/components.css?v=0.2.0">
   <style>
     /* === LAYOUT === */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -291,14 +291,24 @@
     .tab-panel { display: none; }
     .tab-panel--active { display: block; }
 
-    /* === RESPONSIVE === */
-    @media (max-width: 768px) {
+    /* === RESPONSIVE — M3 I/O 2026 Breakpoints === */
+    /* Compact: phone portrait (< 600px) */
+    @media (max-width: 599px) {
       .nav-rail { display: none; }
       .app-bar { left: 0; }
       .main-content { margin-left: 0; padding: 80px var(--md-sys-spacing-4); }
       .palette-switcher { flex-wrap: wrap; gap: var(--md-sys-spacing-1); }
       .inspector-overlay { width: 100%; }
     }
+    /* Medium: phone landscape / small tablet (600–839px) */
+    @media (min-width: 600px) and (max-width: 839px) {
+      .nav-rail { width: var(--md-sys-layout-rail-width, 80px); }
+      .app-bar { left: var(--md-sys-layout-rail-width, 80px); }
+      .main-content { margin-left: var(--md-sys-layout-rail-width, 80px); }
+    }
+    /* Expanded: tablet (840–1199px) — default layout serves this well */
+    /* Large: desktop (1200px+) — default layout, no overrides needed */
+    /* Extra-large: ultra-wide (1600px+) — default layout, no overrides needed */
   </style>
 </head>
 <body>
@@ -424,6 +434,7 @@
         <button class="tab-item" data-tab="tab-inputs" onclick="switchTab(this)">Inputs</button>
         <button class="tab-item" data-tab="tab-chips" onclick="switchTab(this)">Chips</button>
         <button class="tab-item" data-tab="tab-feedback" onclick="switchTab(this)">Feedback</button>
+        <button class="tab-item" data-tab="tab-expressive" onclick="switchTab(this)">✨ Expressive</button>
       </div>
 
       <div class="tab-panel tab-panel--active" id="tab-buttons">
@@ -507,6 +518,175 @@
               <button class="md-button md-button--filled" style="background-color: var(--md-sys-color-error);">Delete</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- EXPRESSIVE COMPONENTS (M3 I/O 2026) -->
+      <div class="tab-panel" id="tab-expressive">
+        <p style="color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-4);font-size:var(--md-sys-typescale-body-medium-size);">
+          New expressive components from Material Design 3 — I/O 2026. Larger shapes, rounded items, grouped menus, and contained search.
+        </p>
+
+        <!-- Expressive List -->
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Expressive List — Standard</div>
+        <div class="md-list--expressive" style="max-width:480px;margin-bottom:var(--md-sys-spacing-6);" id="expressive-list-demo">
+          <div class="md-list-item--expressive md-list-item--selected" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">📥</div>
+            <div class="md-list-item-text">
+              <div class="md-list-item-headline">Inbox</div>
+              <div class="md-list-item-supporting">12 new messages</div>
+            </div>
+            <div class="md-list-item-trailing">12</div>
+          </div>
+          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">📅</div>
+            <div class="md-list-item-text">
+              <div class="md-list-item-headline">Calendar</div>
+              <div class="md-list-item-supporting">3 events today</div>
+            </div>
+            <div class="md-list-item-trailing">3</div>
+          </div>
+          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">📊</div>
+            <div class="md-list-item-text">
+              <div class="md-list-item-headline">Analytics</div>
+              <div class="md-list-item-supporting">Updated 2h ago</div>
+            </div>
+            <div class="md-list-item-trailing">→</div>
+          </div>
+          <div class="md-list-item--expressive md-list-item--two-line" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-avatar">AK</div>
+            <div class="md-list-item-text">
+              <div class="md-list-item-headline">Alex Kim</div>
+              <div class="md-list-item-supporting">Design lead · Online</div>
+            </div>
+            <div class="md-list-item-trailing">🟢</div>
+          </div>
+        </div>
+
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Expressive List — Segmented</div>
+        <div class="md-list--expressive md-list--segmented" style="max-width:480px;margin-bottom:var(--md-sys-spacing-6);">
+          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">🏠</div>
+            <div class="md-list-item-text"><div class="md-list-item-headline">Home</div></div>
+          </div>
+          <div class="md-list-item--expressive md-list-item--selected" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">🔍</div>
+            <div class="md-list-item-text"><div class="md-list-item-headline">Explore</div></div>
+          </div>
+          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+            <div class="md-list-item-icon">👤</div>
+            <div class="md-list-item-text"><div class="md-list-item-headline">Profile</div></div>
+          </div>
+        </div>
+
+        <!-- Vertical Menu — Standard -->
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Vertical Menu — Standard</div>
+        <div style="display:flex;gap:var(--md-sys-spacing-4);flex-wrap:wrap;margin-bottom:var(--md-sys-spacing-6);">
+          <div class="md-menu--vertical" id="menu-standard">
+            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+              <div class="md-menu-item-icon">✏️</div>
+              <div class="md-menu-item-text">Edit</div>
+            </div>
+            <div class="md-menu-item md-menu-item--selected" onclick="selectMenuItem(this, 'menu-standard')">
+              <div class="md-menu-item-icon">📁</div>
+              <div class="md-menu-item-text">Open</div>
+            </div>
+            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+              <div class="md-menu-item-icon">🔗</div>
+              <div class="md-menu-item-text">Share</div>
+              <div class="md-menu-item-trailing">⌘S</div>
+            </div>
+            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+              <div class="md-menu-item-icon">🗑️</div>
+              <div class="md-menu-item-text">Delete</div>
+            </div>
+          </div>
+
+          <!-- Vertical Menu — Grouped -->
+          <div class="md-menu--vertical md-menu--grouped">
+            <div class="md-menu-group">
+              <div class="md-menu-group-label">Actions</div>
+              <div class="md-menu-item" onclick="selectMenuItem(this)">
+                <div class="md-menu-item-icon">✏️</div>
+                <div class="md-menu-item-text">Edit</div>
+              </div>
+              <div class="md-menu-item" onclick="selectMenuItem(this)">
+                <div class="md-menu-item-icon">📋</div>
+                <div class="md-menu-item-text">Duplicate</div>
+              </div>
+            </div>
+            <div class="md-menu-group">
+              <div class="md-menu-group-label">Share</div>
+              <div class="md-menu-item" onclick="selectMenuItem(this)">
+                <div class="md-menu-item-icon">🔗</div>
+                <div class="md-menu-item-text">Copy link</div>
+                <div class="md-menu-item-trailing">⌘C</div>
+              </div>
+              <div class="md-menu-item" onclick="selectMenuItem(this)">
+                <div class="md-menu-item-icon">📤</div>
+                <div class="md-menu-item-text">Export</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vertical Menu — Vibrant -->
+          <div class="md-menu--vertical md-menu--vibrant" id="menu-vibrant">
+            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-vibrant')">
+              <div class="md-menu-item-icon">🎵</div>
+              <div class="md-menu-item-text">Play next</div>
+            </div>
+            <div class="md-menu-item md-menu-item--selected" onclick="selectMenuItem(this, 'menu-vibrant')">
+              <div class="md-menu-item-icon">❤️</div>
+              <div class="md-menu-item-text">Add to favorites</div>
+            </div>
+            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-vibrant')">
+              <div class="md-menu-item-icon">➕</div>
+              <div class="md-menu-item-text">Add to playlist</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contained Search Bar -->
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Contained Search Bar</div>
+        <div style="display:flex;flex-direction:column;gap:var(--md-sys-spacing-4);max-width:720px;margin-bottom:var(--md-sys-spacing-6);">
+          <div class="md-search-bar--contained" onclick="this.querySelector('input').focus()">
+            <div class="md-search-bar__icon">🔍</div>
+            <input type="text" class="md-search-bar__input" placeholder="Search everything…" aria-label="Search">
+          </div>
+          <div class="md-search-bar--contained" onclick="this.querySelector('input').focus()">
+            <div class="md-search-bar__avatar">K</div>
+            <input type="text" class="md-search-bar__input" placeholder="Search with avatar…" aria-label="Search">
+            <div class="md-search-bar__trailing">
+              <span>🎤</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Surface tokens: surface-dim / surface-bright -->
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">New Surface Roles (I/O 2026)</div>
+        <div style="display:flex;gap:var(--md-sys-spacing-3);flex-wrap:wrap;margin-bottom:var(--md-sys-spacing-4);">
+          <div style="background-color:var(--md-sys-color-surface-dim);padding:var(--md-sys-spacing-4);border-radius:var(--md-sys-shape-corner-medium);min-width:160px;">
+            <div style="color:var(--md-sys-color-on-surface);font-weight:500;">surface-dim</div>
+            <div style="color:var(--md-sys-color-on-surface-variant);font-family:var(--md-sys-font-family-mono);font-size:11px;margin-top:4px;" class="surface-dim-value"></div>
+          </div>
+          <div style="background-color:var(--md-sys-color-surface-bright);padding:var(--md-sys-spacing-4);border-radius:var(--md-sys-shape-corner-medium);min-width:160px;">
+            <div style="color:var(--md-sys-color-on-surface);font-weight:500;">surface-bright</div>
+            <div style="color:var(--md-sys-color-on-surface-variant);font-family:var(--md-sys-font-family-mono);font-size:11px;margin-top:4px;" class="surface-bright-value"></div>
+          </div>
+          <div style="background-color:var(--md-sys-color-surface-container-low);padding:var(--md-sys-spacing-4);border-radius:var(--md-sys-shape-corner-medium);min-width:160px;">
+            <div style="color:var(--md-sys-color-on-surface);font-weight:500;">surface-container-low</div>
+            <div style="color:var(--md-sys-color-on-surface-variant);font-family:var(--md-sys-font-family-mono);font-size:11px;margin-top:4px;" class="surface-cl-value"></div>
+          </div>
+        </div>
+
+        <!-- Expressive Shape Tokens -->
+        <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Expressive Shape Tokens</div>
+        <div style="display:flex;gap:var(--md-sys-spacing-3);flex-wrap:wrap;">
+          <div style="width:100px;height:100px;background-color:var(--md-sys-color-primary-container);border-radius:var(--md-sys-shape-corner-expressive-small);display:flex;align-items:center;justify-content:center;color:var(--md-sys-color-on-primary-container);font-size:var(--md-sys-typescale-label-small-size);">expr‑small<br>12px</div>
+          <div style="width:100px;height:100px;background-color:var(--md-sys-color-secondary-container);border-radius:var(--md-sys-shape-corner-expressive-medium);display:flex;align-items:center;justify-content:center;color:var(--md-sys-color-on-secondary-container);font-size:var(--md-sys-typescale-label-small-size);">expr‑med<br>16px</div>
+          <div style="width:100px;height:100px;background-color:var(--md-sys-color-tertiary-container);border-radius:var(--md-sys-shape-corner-expressive-large);display:flex;align-items:center;justify-content:center;color:var(--md-sys-color-on-tertiary-container);font-size:var(--md-sys-typescale-label-small-size);">expr‑large<br>28px</div>
+          <div style="width:100px;height:100px;background-color:var(--md-sys-color-error-container);border-radius:var(--md-sys-shape-corner-expressive-extra-large);display:flex;align-items:center;justify-content:center;color:var(--md-sys-color-on-error-container);font-size:var(--md-sys-typescale-label-small-size);">expr‑XL<br>36px</div>
         </div>
       </div>
     </section>
@@ -719,6 +899,8 @@ Loading tokens...
 
     const surfaceTokens = [
       { name: '--md-sys-color-surface', label: 'Surface' },
+      { name: '--md-sys-color-surface-dim', label: 'Surface Dim' },
+      { name: '--md-sys-color-surface-bright', label: 'Surface Bright' },
       { name: '--md-sys-color-on-surface', label: 'On Surface' },
       { name: '--md-sys-color-surface-variant', label: 'Surface Variant' },
       { name: '--md-sys-color-on-surface-variant', label: 'On Surface Variant' },
@@ -1078,6 +1260,31 @@ Loading tokens...
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('tab-panel--active', p.id === tabId));
     }
 
+    // === EXPRESSIVE LIST INTERACTION ===
+    function toggleExpressiveList(el) {
+      const list = el.closest('.md-list--expressive');
+      if (!list) return;
+      // Single-select within the list
+      list.querySelectorAll('.md-list-item--expressive').forEach(item => {
+        item.classList.remove('md-list-item--selected');
+      });
+      el.classList.add('md-list-item--selected');
+    }
+
+    // === VERTICAL MENU INTERACTION ===
+    function selectMenuItem(el, menuId) {
+      if (menuId) {
+        const menu = el.closest('.md-menu--vertical');
+        menu.querySelectorAll('.md-menu-item').forEach(item => {
+          item.classList.remove('md-menu-item--selected');
+        });
+        el.classList.add('md-menu-item--selected');
+      } else {
+        // Simple toggle for grouped menus
+        el.classList.toggle('md-menu-item--selected');
+      }
+    }
+
     // === PALETTE SWITCHING ===
     function setPalette(name) {
       document.documentElement.setAttribute('data-theme', name);
@@ -1094,6 +1301,7 @@ Loading tokens...
         buildPaletteGen(document.getElementById('palette-gen-input').value);
         buildPaletteCompare();
         updateTokenExport();
+        refreshSurfaceTokenValues();
       }, 50);
     }
 
@@ -1141,6 +1349,20 @@ Loading tokens...
       buildPaletteGen('#7B8FA8');
       buildPaletteCompare();
       updateTokenExport();
+      refreshSurfaceTokenValues();
+    }
+
+    function refreshSurfaceTokenValues() {
+      // Populate the new surface role value displays in the Expressive tab
+      document.querySelectorAll('.surface-dim-value').forEach(el => {
+        el.textContent = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface-dim').trim();
+      });
+      document.querySelectorAll('.surface-bright-value').forEach(el => {
+        el.textContent = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface-bright').trim();
+      });
+      document.querySelectorAll('.surface-cl-value').forEach(el => {
+        el.textContent = getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-surface-container-low').trim();
+      });
     }
 
     init();

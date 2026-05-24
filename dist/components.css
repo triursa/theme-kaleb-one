@@ -609,11 +609,328 @@ body {
   box-shadow: var(--md-sys-elevation-4);
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
+/* === RESPONSIVE — M3 I/O 2026 Breakpoints === */
+/* Compact: phone portrait (< 600px) */
+@media (max-width: 599px) {
   .nav-rail { display: none; }
   .app-bar { margin-left: 0; }
   .main-content { margin-left: 0; }
   .component-grid { grid-template-columns: 1fr; }
   .swatch-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+/* Medium: phone landscape / small tablet (600–839px) */
+@media (min-width: 600px) and (max-width: 839px) {
+  .nav-rail { width: var(--md-sys-layout-rail-width); }
+  .app-bar { margin-left: var(--md-sys-layout-rail-width); }
+  .main-content { margin-left: var(--md-sys-layout-rail-width); }
+  .component-grid { grid-template-columns: 1fr 1fr; }
+  .swatch-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+/* Expanded: tablet (840–1199px) */
+@media (min-width: 840px) and (max-width: 1199px) {
+  .nav-rail { width: var(--md-sys-layout-rail-width); }
+  .app-bar { margin-left: var(--md-sys-layout-rail-width); }
+  .main-content { margin-left: var(--md-sys-layout-rail-width); }
+}
+/* Large: desktop (1200px+) — default layout, no overrides needed */
+/* Extra-large: ultra-wide (1600px+) — default layout, no overrides needed */
+
+/* =========================================================
+   M3 EXPRESSIVE COMPONENTS — I/O 2026
+   Expressive list, vertical menu, contained search bar
+   ========================================================= */
+
+/* === EXPRESSIVE LIST (M3 I/O 2026) === */
+.md-list--expressive {
+  background-color: var(--md-sys-color-surface);
+  border-radius: var(--md-sys-shape-corner-large);
+  overflow: hidden;
+  padding: var(--md-sys-spacing-1) 0;
+}
+
+.md-list-item--expressive {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 10px 16px;
+  gap: 12px;
+  border-radius: var(--md-sys-shape-corner-large);
+  margin: 2px 8px;
+  transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  cursor: pointer;
+  color: var(--md-sys-color-on-surface);
+}
+
+.md-list-item--expressive:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+
+.md-list-item--expressive:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+}
+
+.md-list-item--expressive.md-list-item--selected {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.md-list-item--expressive.md-list-item--selected:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 8%, var(--md-sys-color-secondary-container));
+}
+
+.md-list-item--expressive .md-list-item-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-list-item--expressive.md-list-item--selected .md-list-item-icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.md-list-item--expressive .md-list-item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  flex-shrink: 0;
+}
+
+.md-list-item--expressive .md-list-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.md-list-item--expressive .md-list-item-headline {
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: 400;
+  line-height: 24px;
+  color: inherit;
+}
+
+.md-list-item--expressive .md-list-item-supporting {
+  font-size: var(--md-sys-typescale-body-small-size);
+  line-height: 20px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-list-item--expressive .md-list-item-trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+/* Segmented style — gaps between items instead of dividers */
+.md-list--segmented .md-list-item--expressive {
+  margin-bottom: var(--md-sys-spacing-1);
+}
+
+.md-list--segmented .md-list-item--expressive:last-child {
+  margin-bottom: 0;
+}
+
+/* Two-line expressive list item */
+.md-list-item--expressive.md-list-item--two-line {
+  min-height: 72px;
+}
+
+/* Three-line expressive list item */
+.md-list-item--expressive.md-list-item--three-line {
+  min-height: 88px;
+}
+
+
+/* === VERTICAL MENU (M3 I/O 2026 Expressive) === */
+.md-menu--vertical {
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: var(--md-sys-spacing-1);
+  min-width: 200px;
+  box-shadow: var(--md-sys-elevation-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.md-menu-item {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  gap: 12px;
+  border-radius: var(--md-sys-shape-corner-small);
+  cursor: pointer;
+  transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
+              color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  color: var(--md-sys-color-on-surface);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: 500;
+}
+
+.md-menu-item:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+
+.md-menu-item:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+}
+
+.md-menu-item--selected {
+  background-color: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.md-menu-item--selected:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-tertiary-container) 8%, var(--md-sys-color-tertiary-container));
+}
+
+.md-menu-item .md-menu-item-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-menu-item--selected .md-menu-item-icon {
+  color: var(--md-sys-color-on-tertiary-container);
+}
+
+.md-menu-item .md-menu-item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.md-menu-item .md-menu-item-trailing {
+  font-size: var(--md-sys-typescale-label-small-size);
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+/* Grouped vertical menu — gaps between groups */
+.md-menu--grouped .md-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.md-menu--grouped .md-menu-group + .md-menu-group {
+  margin-top: var(--md-sys-spacing-2);
+}
+
+.md-menu-group-label {
+  padding: 8px 16px 4px;
+  font-size: var(--md-sys-typescale-label-small-size);
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Vibrant color scheme variant */
+.md-menu--vibrant .md-menu-item--selected {
+  background-color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-tertiary);
+}
+
+.md-menu--vibrant .md-menu-item--selected .md-menu-item-icon {
+  color: var(--md-sys-color-on-tertiary);
+}
+
+
+/* === CONTAINED SEARCH BAR (M3 I/O 2026 Expressive) === */
+.md-search-bar--contained {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background-color: var(--md-sys-color-surface-container-high);
+  border-radius: var(--md-sys-shape-corner-full);
+  border: none;
+  gap: 16px;
+  transition: background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+  min-width: 360px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.md-search-bar--contained:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, var(--md-sys-color-surface-container-high));
+}
+
+.md-search-bar--contained:focus-within {
+  background-color: var(--md-sys-color-surface-container-highest);
+  box-shadow: var(--md-sys-elevation-2);
+  padding: 0 16px; /* Tighter padding when focused */
+}
+
+.md-search-bar--contained .md-search-bar__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-search-bar--contained .md-search-bar__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--md-sys-color-on-surface);
+  font-family: var(--md-sys-font-family-body);
+  font-size: var(--md-sys-typescale-body-large-size);
+  font-weight: var(--md-sys-typescale-body-large-weight);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+}
+
+.md-search-bar--contained .md-search-bar__input::placeholder {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-search-bar--contained .md-search-bar__trailing {
+  display: flex;
+  align-items: center;
+  gap: var(--md-sys-spacing-2);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Search bar with avatar (e.g. user profile pic in the bar) */
+.md-search-bar--contained .md-search-bar__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--md-sys-shape-corner-full);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-weight: var(--md-sys-typescale-label-medium-weight);
+  flex-shrink: 0;
+}
+
+/* Search view (expanded state container) */
+.md-search-view {
+  background-color: var(--md-sys-color-surface-container-high);
+  border-radius: var(--md-sys-shape-corner-extra-large);
+  box-shadow: var(--md-sys-elevation-2);
+  overflow: hidden;
+  min-height: 240px;
+}
+
+.md-search-view__results {
+  padding: var(--md-sys-spacing-2);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-medium);
 }

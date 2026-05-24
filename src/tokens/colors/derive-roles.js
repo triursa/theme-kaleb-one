@@ -26,6 +26,8 @@ function deriveDarkTheme(palette) {
     // Surface
     "md-sys-color-surface": palette.neutral[6],
     "md-sys-color-on-surface": palette.neutral[90],
+    "md-sys-color-surface-dim": palette.neutral[6],      // M3 I/O 2026 — darkest surface (same as surface in dark theme)
+    "md-sys-color-surface-bright": palette.neutral[24],    // M3 I/O 2026 — lightest surface in dark theme
     "md-sys-color-surface-variant": palette["neutral-variant"][30],
     "md-sys-color-on-surface-variant": palette["neutral-variant"][80],
     "md-sys-color-surface-container-lowest": palette.neutral[4],
@@ -74,6 +76,8 @@ function deriveLightTheme(palette) {
     // Surface
     "md-sys-color-surface": palette.neutral[98],
     "md-sys-color-on-surface": palette.neutral[10],
+    "md-sys-color-surface-dim": palette.neutral[87],      // M3 I/O 2026 — dimmed surface in light theme
+    "md-sys-color-surface-bright": palette.neutral[98],      // M3 I/O 2026 — brightest surface in light theme (same as surface)
     "md-sys-color-surface-variant": palette["neutral-variant"][90],
     "md-sys-color-on-surface-variant": palette["neutral-variant"][30],
     "md-sys-color-surface-container-lowest": palette.neutral[100],

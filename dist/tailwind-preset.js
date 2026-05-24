@@ -16,6 +16,10 @@
  *   // Tokens available as CSS custom properties, use via arbitrary values:
  *   // bg-[var(--md-sys-color-surface)]
  *   // text-[var(--md-sys-color-on-surface)]
+ *
+ * Breakpoints and layout tokens are also available:
+ *   // @screen m3-medium → min-width: 600px
+ *   // p-m3-layout-2 → padding: 16px (layout spacing)
  */
 
 module.exports = {
@@ -40,6 +44,8 @@ module.exports = {
         "on-error-container": "#FFDAD6",
         "surface": "#11151C",
         "on-surface": "#DCE1E9",
+        "surface-dim": "#11151C",
+        "surface-bright": "#353C44",
         "surface-variant": "#454D56",
         "on-surface-variant": "#C5CDD9",
         "surface-container-lowest": "#0D1117",
@@ -70,7 +76,23 @@ module.exports = {
       "m3-10": "40px",
       "m3-11": "44px",
       "m3-12": "48px",
-      "m3-16": "64px"
+      "m3-16": "64px",
+      "m3-layout-1": "8px",
+      "m3-layout-2": "16px",
+      "m3-layout-3": "24px",
+      "m3-layout-4": "32px",
+      "m3-layout-5": "40px",
+      "m3-layout-6": "48px",
+      "m3-layout-7": "56px",
+      "m3-layout-8": "64px",
+      "m3-layout-10": "80px",
+      "m3-layout-12": "96px",
+      "m3-gap": "8px",
+      "m3-margin-compact": "16px",
+      "m3-margin-medium": "24px",
+      "m3-margin-expanded": "24px",
+      "m3-margin-large": "32px",
+      "m3-margin-extra-large": "48px"
 },
       borderRadius: {
       "m3-none": "0px",
@@ -79,7 +101,11 @@ module.exports = {
       "m3-medium": "12px",
       "m3-large": "16px",
       "m3-extra-large": "28px",
-      "m3-full": "9999px"
+      "m3-full": "9999px",
+      "m3-expressive-small": "12px",
+      "m3-expressive-medium": "16px",
+      "m3-expressive-large": "28px",
+      "m3-expressive-extra-large": "36px"
 },
       boxShadow: {
       "m3-0": "none",
@@ -125,6 +151,31 @@ module.exports = {
       "m3-emphasized-decelerate": "cubic-bezier(0.05, 0.7, 0.1, 1)",
       "m3-legacy": "cubic-bezier(0.4, 0, 0.2, 1)",
       "m3-linear": "linear"
+},
+      screens: {
+        "m3-compact": "0px",
+        "m3-medium": "600px",
+        "m3-expanded": "840px",
+        "m3-large": "1200px",
+        "m3-extra-large": "1600px"
+},
+      layout: {
+        "m3-layout-bar-height": "64px",
+        "m3-layout-bar-height-expressive": "72px",
+        "m3-layout-rail-width": "80px",
+        "m3-layout-rail-width-expanded": "112px",
+        "m3-layout-pane-min-width": "360px",
+        "m3-layout-content-max-width": "1200px",
+        "m3-layout-margin-compact": "16px",
+        "m3-layout-margin-medium": "24px",
+        "m3-layout-margin-expanded": "24px",
+        "m3-layout-margin-large": "32px",
+        "m3-layout-margin-extra-large": "48px",
+        "m3-layout-gap": "8px",
+        "m3-layout-safety-region-top": "24px",
+        "m3-layout-safety-region-bottom": "32px",
+        "m3-layout-drag-handle-height": "32px",
+        "m3-layout-fold-spacing": "8px"
 },
     },
   },

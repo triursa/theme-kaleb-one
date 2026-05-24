@@ -88,6 +88,22 @@
   --md-sys-spacing-11: 44px;
   --md-sys-spacing-12: 48px;
   --md-sys-spacing-16: 64px;
+  --md-sys-spacing-layout-1: 8px;
+  --md-sys-spacing-layout-2: 16px;
+  --md-sys-spacing-layout-3: 24px;
+  --md-sys-spacing-layout-4: 32px;
+  --md-sys-spacing-layout-5: 40px;
+  --md-sys-spacing-layout-6: 48px;
+  --md-sys-spacing-layout-7: 56px;
+  --md-sys-spacing-layout-8: 64px;
+  --md-sys-spacing-layout-10: 80px;
+  --md-sys-spacing-layout-12: 96px;
+  --md-sys-spacing-gap: 8px;
+  --md-sys-spacing-margin-compact: 16px;
+  --md-sys-spacing-margin-medium: 24px;
+  --md-sys-spacing-margin-expanded: 24px;
+  --md-sys-spacing-margin-large: 32px;
+  --md-sys-spacing-margin-extra-large: 48px;
 }
 
 /* === Elevation === */
@@ -109,6 +125,10 @@
   --md-sys-shape-corner-large: 16px;
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 9999px;
+  --md-sys-shape-corner-expressive-small: 12px;
+  --md-sys-shape-corner-expressive-medium: 16px;
+  --md-sys-shape-corner-expressive-large: 28px;
+  --md-sys-shape-corner-expressive-extra-large: 36px;
 }
 
 /* === Motion — Duration === */
@@ -141,6 +161,35 @@
   --md-sys-motion-easing-linear: linear;
 }
 
+/* === Breakpoints — M3 I/O 2026 === */
+:root {
+  --md-sys-breakpoint-compact: 0px;
+  --md-sys-breakpoint-medium: 600px;
+  --md-sys-breakpoint-expanded: 840px;
+  --md-sys-breakpoint-large: 1200px;
+  --md-sys-breakpoint-extra-large: 1600px;
+}
+
+/* === Layout Scaffold — M3 I/O 2026 === */
+:root {
+  --md-sys-layout-bar-height: 64px;
+  --md-sys-layout-bar-height-expressive: 72px;
+  --md-sys-layout-rail-width: 80px;
+  --md-sys-layout-rail-width-expanded: 112px;
+  --md-sys-layout-pane-min-width: 360px;
+  --md-sys-layout-content-max-width: 1200px;
+  --md-sys-layout-margin-compact: 16px;
+  --md-sys-layout-margin-medium: 24px;
+  --md-sys-layout-margin-expanded: 24px;
+  --md-sys-layout-margin-large: 32px;
+  --md-sys-layout-margin-extra-large: 48px;
+  --md-sys-layout-gap: 8px;
+  --md-sys-layout-safety-region-top: 24px;
+  --md-sys-layout-safety-region-bottom: 32px;
+  --md-sys-layout-drag-handle-height: 32px;
+  --md-sys-layout-fold-spacing: 8px;
+}
+
 /*
  * Theme: Volcanic
  * Dark warm gray, amber/orange accent — warm, grounded
@@ -165,6 +214,8 @@
   --md-sys-color-on-error-container: #FFDAD6;
   --md-sys-color-surface: #15130F;
   --md-sys-color-on-surface: #E5E1DA;
+  --md-sys-color-surface-dim: #15130F;
+  --md-sys-color-surface-bright: #383632;
   --md-sys-color-surface-variant: #48443E;
   --md-sys-color-on-surface-variant: #C7C4BD;
   --md-sys-color-surface-container-lowest: #110F0D;
